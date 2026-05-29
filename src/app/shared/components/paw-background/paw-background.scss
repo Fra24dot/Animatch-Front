@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  height: calc(100vh - 60px);
+}
+
+.paw-background {
+  position: relative;
+  height: 100%;
+  background-color: #fcebec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  .paw {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0;
+    animation: walkPaw 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes walkPaw {
+  0% { opacity: 0; transform: translateY(0) scale(0.8); }
+  20% { opacity: 0.4; }
+  50% { opacity: 0.6; transform: translateY(-20px) scale(1); }
+  80% { opacity: 0.4; }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.8); }
+}

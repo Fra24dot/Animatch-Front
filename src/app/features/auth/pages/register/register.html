@@ -1,24 +1,13 @@
 <app-navbar></app-navbar>
-
-<div class="register-background">
-  <!-- Pattes animées -->
-  @for (paw of paws; track paw) {
-    <div class="paw"
-         [style.left.%]="paw.x"
-         [style.top.%]="paw.y"
-         [style.animation-delay]="paw.delay + 's'"
-         [style.transform]="'rotate(' + paw.rotation + 'deg)'">
-      🐾
-    </div>
-  }
+<app-paw-background>
 
   <!-- Box centrale -->
   <div class="register-box">
     <h1>Register</h1>
     <div class="buttons">
-      <button class="btn-login" routerLink="/login">Adoptant</button>
-      <button class="btn-register" routerLink="/register">Refuge</button>
+      <button class="btn-login" routerLink="/register-user">Adoptant</button>
+      <button class="btn-register" routerLink="/register-refuge">Refuge</button>
     </div>
   </div>
-
-</div>  
+</app-paw-background>
+ 

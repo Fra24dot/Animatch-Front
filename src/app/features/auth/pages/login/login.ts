@@ -1,19 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
 import { Navbar } from '../../../../shared/components/navbar/navbar';
-import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserLogin } from '../../../../shared/components/models/auth.model';
+import { PawBackground } from '../../../../shared/components/paw-background/paw-background';
 
 @Component({
   selector: 'app-login',
-  imports: [Navbar, ReactiveFormsModule],
+  imports: [Navbar,PawBackground, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login implements OnInit {
+export class Login {
   paws: { x: number, y: number, delay: number, rotation: number }[] = [];
 
   private readonly authService = inject(AuthService);
@@ -58,18 +58,6 @@ export class Login implements OnInit {
           }
         }
       });
-  }
-  ngOnInit() {
-    // Génère 15 pattes aléatoires
-    for (let i = 0; i < 16; i++) {
-      this.paws.push({
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        delay: Math.random() * 5,
-        rotation: Math.random() * 360
-      });
-    }
-
   }
 }
   

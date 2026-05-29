@@ -1,0 +1,13 @@
+<div class="paw-background">
+  @for (paw of paws; track paw) {
+    <div class="paw"
+         [style.left.%]="paw.x"
+         [style.top.%]="paw.y"
+         [style.animation-delay]="paw.delay + 's'"
+         [style.transform]="'rotate(' + paw.rotation + 'deg)'">
+      🐾
+    </div>
+  }
+  
+  <ng-content></ng-content>
+</div>
