@@ -5,6 +5,7 @@ import { PawBackground } from '../../../../shared/components/paw-background/paw-
 import { Navbar } from '../../../../shared/components/navbar/navbar';
 import { passwordMatchValidator } from '../../../../shared/validators/password-validator';
 import { AuthService } from '../../../../core/services/auth.service'; 
+import { UserRegister } from '../../../../shared/components/models/auth.model';
 
 
 
@@ -33,7 +34,8 @@ export class RegisterUser {
     gender: ['', Validators.required],
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', Validators.required],
-  }, {
+  }, 
+  {
     validators: passwordMatchValidator 
   });
 
@@ -54,9 +56,9 @@ export class RegisterUser {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    const { confirmPassword, ...registerData } = this.form.value;
-    
-    this.authService.registerUser(registerData as any).subscribe({
+    const { confirmPassword, ...payload } = this.form.value;
+
+    this.authService.registerUser(payload as UserRegister).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/login']);

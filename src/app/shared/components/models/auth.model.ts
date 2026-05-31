@@ -21,4 +21,5 @@ export interface ShelterRegister {
     address: string;
     city: string;
     postalCode: string;
+    creationYear: number;
 }
