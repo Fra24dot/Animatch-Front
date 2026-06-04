@@ -8,7 +8,7 @@ export interface UserRegister {
     lastName: string;
     email: string;
     password: string;
-    gender: string;
+    userGender: number;
     birthDate: string;
 }
 

@@ -39,10 +39,31 @@ private readonly authService = inject(AuthService);
   });
 
   nextStep() {
+  if (this.currentStep() === 1) {
+    const step1Valid = this.form.get('name')?.valid && 
+                       this.form.get('companyNumber')?.valid && 
+                       this.form.get('creationYear')?.valid;
+    if (!step1Valid) {
+      this.form.get('name')?.markAsTouched();
+      this.form.get('companyNumber')?.markAsTouched();
+      return; 
+    }
+  }
+
+  if (this.currentStep() === 2) {
+    
+    const step2Valid = this.form.get('address')?.valid && 
+                       this.form.get('city')?.valid && 
+                       this.form.get('postalCode')?.valid && 
+                       this.form.get('phoneNumber')?.valid;
+    if (!step2Valid) return; 
+  }
+
   if (this.currentStep() < 3) {
     this.currentStep.update(step => step + 1);
   }
 }
+
 
 prevStep() {
   if (this.currentStep() > 1) {
@@ -51,31 +72,44 @@ prevStep() {
 }
 
  onSubmit() {
-    if (this.form.invalid) return;
+  if (this.form.invalid) return;
 
-    this.isLoading.set(true);
-    this.errorMessage.set(null); 
+  this.isLoading.set(true);
+  this.errorMessage.set(null); 
 
-    
-    const { confirmPassword, ...payload } = this.form.value;
-    
-    
-    this.authService.registerShelter(payload as ShelterRegister).subscribe({
-      next: () => {
-        this.isLoading.set(false);
-        console.log('Refuge enregistré avec succès !');
-        this.router.navigate(['/login']); 
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        
-        if (err.error?.message) {
-          this.errorMessage.set(err.error.message);
-        } else {
-          this.errorMessage.set("Une erreur est survenue lors de l'inscription. Veuillez rééssayer.");
-        }
-        console.error('Erreur inscription :', err);
+  
+  const rawValues = this.form.value;
+  
+  
+  const payload: ShelterRegister = {
+    name: rawValues.name!,
+    companyNumber: rawValues.companyNumber!,
+    creationYear: Number(rawValues.creationYear), 
+    phoneNumber: rawValues.phoneNumber!,
+    address: rawValues.address!,
+    city: rawValues.city!,
+    postalCode: rawValues.postalCode!,
+    email: rawValues.email!,
+    password: rawValues.password!
+  };
+  
+  
+  this.authService.registerShelter(payload).subscribe({
+    next: () => {
+      this.isLoading.set(false);
+      console.log('Refuge enregistré avec succès !');
+      this.router.navigate(['/login']); 
+    },
+    error: (err) => {
+      this.isLoading.set(false);
+      
+      if (err.error?.message) {
+        this.errorMessage.set(err.error.message);
+      } else {
+        this.errorMessage.set("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
       }
-    });
-  }
+      console.error('Erreur inscription :', err);
+    }
+  });
+}
 }

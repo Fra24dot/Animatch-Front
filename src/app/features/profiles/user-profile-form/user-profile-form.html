@@ -1,0 +1,113 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
+<div class="profile-box">
+  <h1>Compléter mon profil</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div class="form-slider" 
+       [class.step-two]="currentStep() === 2"
+       [class.step-three]="currentStep() === 3">
+    
+    <div class="form-step step-1">
+      <h3>Étape 1 : Votre Foyer</h3>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Dans quelle ville habitez-vous ?</label>
+          <input formControlName="city" type="text" />
+        </div>
+        <div class="form-group">
+          <label>Type de logement</label>
+          <select formControlName="housingType">
+            <option [value]="0">Appartement</option>
+            <option [value]="1">Maison</option>
+            <option [value]="2">Autres</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nombre de personnes au foyer</label>
+          <input formControlName="peopleCount" type="number" />
+        </div>
+        <div class="form-group checkbox">
+          <label><input formControlName="hasChildren" type="checkbox" /> J'ai des enfants</label>
+        </div>
+        <div class="form-group checkbox">
+          <label><input formControlName="petsAllowed" type="checkbox" /> Les animaux sont autorisés dans mon logement</label>
+        </div>
+      </div>
+      <button type="button" class="btn-next" (click)="nextStep()">Suivant &rarr;</button>
+    </div>
+
+    <div class="form-step step-2">
+      <h3>Étape 2 : Votre Expérience</h3>
+      <div class="form-grid">
+        <div class="form-group checkbox full-width">
+          <label><input formControlName="hasAnimals" type="checkbox" /> J'ai actuellement des animaux</label>
+        </div>
+        <div class="form-group">
+          <label>Combien ?</label>
+          <input formControlName="animalsCount" type="number" />
+        </div>
+        <div class="form-group">
+          <label>Type d'animal</label>
+          <select formControlName="animalType">
+            <option [value]="0">Chien</option>
+            <option [value]="1">Chat</option>
+            <option [value]="2">Autres</option>
+          </select>
+        </div>
+        <div class="form-group checkbox">
+          <label><input formControlName="alreadyAdopted" type="checkbox" /> J'ai déjà adopté en refuge auparavant</label>
+        </div>
+        <div class="form-group checkbox full-width">
+          <label><input formControlName="adoptionPermit" type="checkbox" /> Je possède mon extrait du fichier central (Permit d'environnement Wallonie)</label>
+        </div>
+      </div>
+      <div class="step-buttons">
+        <button type="button" class="btn-prev" (click)="prevStep()">&larr; Retour</button>
+        <button type="button" class="btn-next-step" (click)="nextStep()">Suivant &rarr;</button>
+      </div>
+    </div>
+
+    <div class="form-step step-3">
+      <h3>Étape 3 : Votre Quotidien</h3>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Situation professionnelle</label>
+          <select formControlName="jobType">
+            <option [value]="0">Temps plein</option>
+            <option [value]="1">Temps partiel</option>
+            <option [value]="2">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Heures consécutives où le chien sera seul (par jour)</label>
+          <input formControlName="dogAloneHours" type="number" />
+        </div>
+        <div class="form-group checkbox">
+          <label><input formControlName="remoteWork" type="checkbox" /> Je fais du télétravail</label>
+        </div>
+        <div class="form-group checkbox">
+          <label><input formControlName="activeLifestyle" type="checkbox" /> J'ai un style de vie très actif/sportif</label>
+        </div>
+        <div class="form-group checkbox">
+          <label><input formControlName="financiallyStable" type="checkbox" /> Je confirme pouvoir assumer les frais vétérinaires et de nourriture</label>
+        </div>
+      </div>
+      
+      @if (errorMessage()) {
+        <div class="error-msg">{{ errorMessage() }}</div>
+      }
+
+      <div class="step-buttons">
+        <button type="button" class="btn-prev" (click)="prevStep()">&larr; Retour</button>
+        <button type="submit" class="btn-register" [disabled]="form.invalid || isLoading()">
+          Enregistrer mon profil 
+        </button>
+      </div>
+    </div>
+
+  </div>
+</form>
+</div>
+</app-paw-background>

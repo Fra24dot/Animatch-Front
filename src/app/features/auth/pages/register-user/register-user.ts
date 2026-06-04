@@ -31,7 +31,7 @@ export class RegisterUser {
     firstName: ['', [Validators.required, Validators.maxLength(50)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(250)]],
     birthDate: ['', Validators.required],
-    gender: ['', Validators.required],
+    userGender: ['', Validators.required],
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', Validators.required],
   }, 
@@ -40,7 +40,7 @@ export class RegisterUser {
   });
 
   nextStep() {
-    this.currentStep.set(2);
+     this.currentStep.set(2);
   }
 
   
@@ -52,13 +52,25 @@ export class RegisterUser {
     if (this.form.invalid) {
       return;
     } 
-    // On active le loader et on efface les erreurs précédentes
+
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    const { confirmPassword, ...payload } = this.form.value;
+    
+    const rawValues = this.form.value;
 
-    this.authService.registerUser(payload as UserRegister).subscribe({
+    
+    const payload: UserRegister = {
+      lastName: rawValues.lastName!,
+      firstName: rawValues.firstName!,
+      email: rawValues.email!,
+      birthDate: rawValues.birthDate!,
+      password: rawValues.password!,
+      userGender: Number(rawValues.userGender) 
+    };
+
+    
+    this.authService.registerUser(payload).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/login']);
