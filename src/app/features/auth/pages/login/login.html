@@ -1,16 +1,6 @@
 <app-navbar></app-navbar>
+<app-paw-background>
 
-<div class="login-background">
-  <!-- Pattes animées -->
-  @for (paw of paws; track paw) {
-    <div class="paw"
-         [style.left.%]="paw.x"
-         [style.top.%]="paw.y"
-         [style.animation-delay]="paw.delay + 's'"
-         [style.transform]="'rotate(' + paw.rotation + 'deg)'">
-      🐾
-    </div>
-  }
 
   <!-- Box centrale -->
   <div class="login-box">
@@ -27,5 +17,5 @@
       <button type="submit" [disabled]="isLoading()" class="btn-login">Login</button>
     </form>
   </div>
-</div>
+</app-paw-background>
   
