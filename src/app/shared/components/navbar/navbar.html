@@ -1,5 +1,22 @@
 <nav class="navbar">
-  <span class="navbar-left">Qui sommes nous?</span>
-  <span class="navbar-brand" routerLink="/welcome">ANIMATCH 🐾</span>
+  @if (!isLogged()) {
+    <span class="navbar-left" routerLink="/about">Qui sommes nous?</span>
+  }
+
+  @if (isLogged()) {
+    <span class="navbar-brand logged">ANIMATCH 🐾</span>
+  } @else {
+    <span class="navbar-brand" routerLink="/welcome">ANIMATCH 🐾</span>
+  }
   
+  @if (isLogged()) {
+    <div class="navbar-right">
+      <a routerLink="/feed" routerLinkActive="active" class="nav-btn">Feed</a>
+      <a routerLink="/matches" routerLinkActive="active" class="nav-btn">Matches</a>
+      <a routerLink="/messages" routerLinkActive="active" class="nav-btn">Messages</a>
+      <a routerLink="/preferences" routerLinkActive="active" class="nav-btn">Mes Préférences</a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-btn">Mon Profil</a>
+      <button (click)="logout()" class="btn-logout">Déconnexion</button>
+    </div>
+  }
 </nav>
