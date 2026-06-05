@@ -1,24 +1,23 @@
 import { Component, inject, signal } from '@angular/core';
-import { Navbar } from '../../../../shared/components/navbar/navbar';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
-import { FormBuilder, Validators } from '@angular/forms';
 import { UserLogin } from '../../../../shared/components/models/auth.model';
+import { Navbar } from '../../../../shared/components/navbar/navbar';
 import { PawBackground } from '../../../../shared/components/paw-background/paw-background';
 
 @Component({
   selector: 'app-login',
-  imports: [Navbar,PawBackground, ReactiveFormsModule],
+  standalone: true,
+  imports: [Navbar, PawBackground, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login {
-  paws: { x: number, y: number, delay: number, rotation: number }[] = [];
-
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+
   errorMessage = signal<string | null>(null);
   isLoading = signal<boolean>(false);
 
@@ -38,7 +37,7 @@ export class Login {
         next: () => {
           this.isLoading.set(false);
 
-          // Redirige selon le type de compte
+          // Récupère le rôle de l'utilisateur connecté pour l'aiguiller
           const accountType = this.authService.connectedUser()?.accountType;
 
           if (accountType === 'Admin') {
@@ -46,7 +45,7 @@ export class Login {
           } else if (accountType === 'Shelter') {
             this.router.navigate(['/shelter']);
           } else {
-            this.router.navigate(['/swipe']);
+            this.router.navigate(['/user-profile-form']);
           }
         },
         error: (err) => {
@@ -60,4 +59,3 @@ export class Login {
       });
   }
 }
-  

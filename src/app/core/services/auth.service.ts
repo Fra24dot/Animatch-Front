@@ -16,9 +16,21 @@ export class AuthService {
 
   connectedUser = signal<JwtPayload | null>(null);
 
+  // 🌟 REMPLACE TON ANCIEN CONSTRUCTEUR PAR CELUI-CI :
   constructor() {
-    // Vérifie si un utilisateur était déjà connecté
-    this.connectedUser.set(this.storage.getLocal<JwtPayload>('payload') ?? null);
+    const savedPayload = this.storage.getLocal<JwtPayload>('payload');
+    
+    if (savedPayload) {
+      // Sécurité supplémentaire : On vérifie si le token n'est pas expiré (exp est en secondes)
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (savedPayload.exp && savedPayload.exp < currentTime) {
+        this.logout(); // Expired ! On nettoie tout
+      } else {
+        this.connectedUser.set(savedPayload);
+      }
+    } else {
+      this.connectedUser.set(null);
+    }
   }
 
   login(credentials: UserLogin): Observable<TokenInfo> {

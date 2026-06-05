@@ -8,14 +8,14 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" />
+        <input type="email" id="email" formControlName="email" autocomplete="off" />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" formControlName="password" />
+        <input type="password" id="password" formControlName="password" autocomplete="off" />
       </div>
       <button type="submit" [disabled]="isLoading()" class="btn-login">Login</button>
     </form>
   </div>
-</app-paw-background>
-  
+
+  </app-paw-background>

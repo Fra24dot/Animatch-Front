@@ -1,24 +1,103 @@
 .navbar {
+  height: 60px;
+  background-color: #E63946; /* Ton rouge de marque Animatch */
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #df1926;
+  justify-content: space-between; /* Aligne les blocs aux extrémités */
+  padding: 0 2rem;
+  font-family: 'Rethink Sans', sans-serif;
   color: white;
-  font-size: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 100; /* Reste toujours au-dessus du fond rose */
+
+  .navbar-left {
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 
   .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    letter-spacing: 2px;
-    font-family: Rethink Sans, sans-serif;
-    color: #fff;
+    cursor: pointer;
+    letter-spacing: 1px;
+    
+    &.logged {
+      cursor: default; 
+    }
+    
+    // Si l'utilisateur est connecté, on pousse le logo un peu vers la gauche si besoin,
+    // mais space-between va naturellement gérer l'espace avec la navbar-right.
   }
 
-  .navbar-left{
-    letter-spacing: 2px;
-    font-family: Rethink Sans, sans-serif;
-    color: #fff;
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem; /* Espace entre chaque bouton */
+
+    .nav-btn {
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      transition: background-color 0.2s, opacity 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Style pour le lien de la page active */
+      &.active {
+        background-color: rgba(255, 255, 255, 0.25);
+        font-weight: bold;
+      }
+    }
+
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: white;
+        color: #E63946;
+        border-color: white;
+      }
+    }
+  }
+}
+
+/* --- OPTION RESPONSIVE RAPIDE --- 
+   Si l'écran est trop petit, on réduit les écritures pour éviter que ça déborde */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+    
+    .navbar-brand {
+      font-size: 1.2rem;
+    }
+    
+    .navbar-right {
+      gap: 0.5rem;
+      
+      .nav-btn, .btn-logout {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.5rem;
+      }
+    }
   }
 }
