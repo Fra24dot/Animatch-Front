@@ -12,14 +12,18 @@ export class Navbar {
 private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // 🌟 On se branche directement sur le signal du service !
+  // Vérifie si l'utilisateur est connecté
   isLogged = computed(() => this.authService.connectedUser() !== null);
 
+  // Extrait le rôle de l'utilisateur ('Admin', 'User', 'Shelter', etc.)
+  // On utilise StringComparison implicite en TS en vérifiant la valeur exacte
+  isAdmin = computed(() => {
+    const payload = this.authService.connectedUser();
+    return payload?.accountType === 'Admin';
+  });
+
   logout(): void {
-    // 1. On appelle le logout du service pour nettoyer les tokens et le localStorage
     this.authService.logout();
-    
-    // 2. On redirige proprement vers l'accueil public
     this.router.navigate(['/welcome']);
   }
 }

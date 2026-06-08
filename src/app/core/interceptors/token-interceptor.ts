@@ -8,6 +8,6 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (!token) return next(req);
   
-  const secured = req.clone({ setHeaders: { Authorization: `bearer ${token}` } });
+  const secured = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
   return next(secured);
 };
