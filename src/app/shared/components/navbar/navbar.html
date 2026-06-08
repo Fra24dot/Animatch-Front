@@ -11,11 +11,19 @@
   
   @if (isLogged()) {
     <div class="navbar-right">
-      <a routerLink="/feed" routerLinkActive="active" class="nav-btn">Feed</a>
-      <a routerLink="/matches" routerLinkActive="active" class="nav-btn">Matches</a>
-      <a routerLink="/messages" routerLinkActive="active" class="nav-btn">Messages</a>
-      <a routerLink="/preferences" routerLinkActive="active" class="nav-btn">Mes Préférences</a>
-      <a routerLink="/profile" routerLinkActive="active" class="nav-btn">Mon Profil</a>
+      
+      @if (isAdmin()) {
+        <a routerLink="/admin/validation" routerLinkActive="active" class="nav-btn">Mon profil</a>
+      } 
+      
+      @else {
+        <a routerLink="/feed" routerLinkActive="active" class="nav-btn">Feed</a>
+        <a routerLink="/matches" routerLinkActive="active" class="nav-btn">Matchs</a>
+        <a routerLink="/messages" routerLinkActive="active" class="nav-btn">Messages</a>
+        <a routerLink="/preferences" routerLinkActive="active" class="nav-btn">Mes Préférences</a>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-btn">Mon Profil</a>
+      }
+
       <button (click)="logout()" class="btn-logout">Déconnexion</button>
     </div>
   }

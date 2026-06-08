@@ -41,7 +41,7 @@ export class Login {
           const accountType = this.authService.connectedUser()?.accountType;
 
           if (accountType === 'Admin') {
-            this.router.navigate(['/admin']);
+            this.router.navigate(['/admin-shelter-validation']);
           } else if (accountType === 'Shelter') {
             this.router.navigate(['/shelter']);
           } else {

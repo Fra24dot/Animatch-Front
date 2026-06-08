@@ -2,9 +2,14 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { tokenInterceptor } from './core/interceptors/token-interceptor';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(
+      withInterceptors([tokenInterceptor]) 
+    ),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes)
   ]
