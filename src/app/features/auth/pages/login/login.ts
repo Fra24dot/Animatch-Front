@@ -43,7 +43,7 @@ export class Login {
           if (accountType === 'Admin') {
             this.router.navigate(['/admin-shelter-validation']);
           } else if (accountType === 'Shelter') {
-            this.router.navigate(['/shelter']);
+            this.router.navigate(['/add-dog']);
           } else {
             this.router.navigate(['/user-profile-form']);
           }
