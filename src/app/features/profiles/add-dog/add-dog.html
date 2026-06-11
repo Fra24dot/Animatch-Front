@@ -1,0 +1,175 @@
+<app-navbar></app-navbar>
+
+<div style="display: flex; flex-direction: column; width: 100%; min-height: calc(100vh - 64px); background-color: #fcebec; margin: 0; padding: 0;">
+  
+<app-paw-background style="display: flex; flex-grow: 1; width: 100%; justify-content: center; align-items: center; min-height: 100%; padding: 2rem 0;">
+<div class="profile-box">
+  <h1>Ajouter un compagnon</h1>
+
+  @if (isLoading()) {
+    <div class="status-message loading">
+      <div class="spinner"></div>
+      <p>Sauvegarde sur Azure en cours...</p>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="status-message error">
+      <p>❌ {{ errorMessage() }}</p>
+    </div>
+  }
+
+  @if (createdDog()) {
+    <div class="status-message success">
+      <h3>🎉 {{ createdDog()?.name }} a été ajouté avec succès !</h3>
+      @if (createdDog()?.imageBase64) {
+        <img [src]="createdDog()?.imageBase64" alt="Photo du chien" class="success-img" />
+      }
+    </div>
+  }
+
+  <form [formGroup]="dogForm" (ngSubmit)="onSubmit()" [hidden]="isLoading() || createdDog()">
+    
+    <div class="form-slider" [ngClass]="{
+      'step-two': currentStep() === 2,
+      'step-three': currentStep() === 3
+    }">
+
+      <div class="form-step step-1">
+        <h3>Étape 1 : Informations générales</h3>
+        <div class="form-grid">
+          
+          <div class="form-group full-width">
+            <label for="name">Nom du chien</label>
+            <input type="text" id="name" formControlName="name" placeholder="Ex: Rocky, Bella..." />
+          </div>
+
+          <div class="form-group full-width">
+            <label for="description">Description (Histoire, habitudes...)</label>
+            <input type="text" id="description" formControlName="description" placeholder="Chien très affectueux, joueur..." />
+          </div>
+
+          <div class="form-group full-width">
+            <label>Photo du chien</label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+          </div>
+
+        </div>
+        <button type="button" class="btn-next" [disabled]="dogForm.get('name')?.invalid || dogForm.get('description')?.invalid" (click)="goToStep(2)">Suivant</button>
+      </div>
+
+      <div class="form-step step-2">
+        <h3>Étape 2 : Caractéristiques</h3>
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="race">Type de race</label>
+            <select id="race" formControlName="race">
+              <option value="" disabled selected>Choisir...</option>
+              @for (race of races; track $index) {
+                <option [value]="$index">{{ race }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Genre</label>
+            <select id="gender" formControlName="gender">
+              <option value="" disabled selected>Choisir...</option>
+              @for (gender of genders; track $index) {
+                <option [value]="$index">{{ gender }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ageRange">Tranche d'âge</label>
+            <select id="ageRange" formControlName="ageRange">
+              <option value="" disabled selected>Choisir...</option>
+              @for (age of ageRanges; track $index) {
+                <option [value]="$index">{{ age }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="size">Taille</label>
+            <select id="size" formControlName="size">
+              <option value="" disabled selected>Choisir...</option>
+              @for (size of sizes; track $index) {
+                <option [value]="$index">{{ size }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="energyLevel">Niveau d'énergie</label>
+            <select id="energyLevel" formControlName="energyLevel">
+              <option value="" disabled selected>Choisir...</option>
+              @for (energy of energyLevels; track $index) {
+                <option [value]="$index">{{ energy }}</option>
+              }
+            </select>
+          </div>
+
+        </div>
+
+        <div class="step-buttons">
+          <button type="button" class="btn-prev" (click)="goToStep(1)">Retour</button>
+          <button type="button" class="btn-next-step" 
+                  [disabled]="dogForm.get('race')?.invalid || dogForm.get('gender')?.invalid || dogForm.get('ageRange')?.invalid || dogForm.get('size')?.invalid || dogForm.get('energyLevel')?.invalid" 
+                  (click)="goToStep(3)">Suivant</button>
+        </div>
+      </div>
+
+      <div class="form-step step-3">
+        <h3>Étape 3 : Profil & Traits</h3>
+        <div class="form-grid scrollable-tags">
+
+          <label class="section-tag-title">Traits de personnalité</label>
+          @for (p of personalitiesList; track p.id) {
+            <div class="form-group checkbox">
+              <input type="checkbox" [id]="'p-' + p.id" (change)="onCheckboxChange('personalityIds', p.id, $event)" />
+              <label [for]="'p-' + p.id">{{ p.name }}</label>
+            </div>
+          }
+
+          <label class="section-tag-title">Compatibilités</label>
+          @for (c of compatibilitiesList; track c.id) {
+            <div class="form-group checkbox">
+              <input type="checkbox" [id]="'c-' + c.id" (change)="onCheckboxChange('compatibilityIds', c.id, $event)" />
+              <label [for]="'c-' + c.id">{{ c.name }}</label>
+            </div>
+          }
+
+          <label class="section-tag-title">Besoins spécifiques</label>
+          @for (s of specialNeedsList; track s.id) {
+            <div class="form-group checkbox">
+              <input type="checkbox" [id]="'s-' + s.id" (change)="onCheckboxChange('specialNeedsIds', s.id, $event)" />
+              <label [for]="'s-' + s.id">{{ s.name }}</label>
+            </div>
+          }
+
+          <label class="section-tag-title">Historique médical</label>
+          @for (m of medicalHistoriesList; track m.id) {
+            <div class="form-group checkbox">
+              <input type="checkbox" [id]="'m-' + m.id" (change)="onCheckboxChange('medicalHistoryIds', m.id, $event)" />
+              <label [for]="'m-' + m.id">{{ m.name }}</label>
+            </div>
+          }
+
+        </div>
+
+        <div class="step-buttons">
+          <button type="button" class="btn-prev" (click)="goToStep(2)">Retour</button>
+          <button type="submit" class="btn-register" [disabled]="dogForm.invalid || isLoading()">
+  Enregistrer
+</button>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+</app-paw-background>
+</div>

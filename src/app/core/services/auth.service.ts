@@ -16,7 +16,7 @@ export class AuthService {
 
   connectedUser = signal<JwtPayload | null>(null);
 
-  // 🌟 REMPLACE TON ANCIEN CONSTRUCTEUR PAR CELUI-CI :
+  
   constructor() {
     const savedPayload = this.storage.getLocal<JwtPayload>('payload');
     

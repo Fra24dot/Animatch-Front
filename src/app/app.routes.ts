@@ -6,6 +6,7 @@ import { Register } from './features/auth/pages/register/register';
 import { RegisterUser } from './features/auth/pages/register-user/register-user';
 import { UserProfileForm } from './features/profiles/user-profile-form/user-profile-form';
 import { AdminShelterValidation } from './features/profiles/admin-shelter-validation/admin-shelter-validation';
+import { AddDog } from './features/profiles/add-dog/add-dog';
 
 export const routes: Routes = [
     { path: '', component: Welcome },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'register-shelter', component: RegisterShelter },
     { path: 'user-profile-form', component: UserProfileForm },
     { path: 'admin-shelter-validation', component: AdminShelterValidation },
+    { path: 'add-dog', component: AddDog },
 
     
     { path: '**', redirectTo: '' }

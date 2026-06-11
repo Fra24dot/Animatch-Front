@@ -4,7 +4,7 @@ import { AdminService } from '../../../core/services/admin.service';
 import { Shelter } from '../../../shared/components/models/shelter.model';
 import { PawBackground } from '../../../shared/components/paw-background/paw-background';
 import { Navbar } from '../../../shared/components/navbar/navbar';
-import {Router} from "@angular/router";
+
 
 @Component({
   selector: 'app-admin-shelter-validation',

@@ -16,6 +16,13 @@
         <a routerLink="/admin/validation" routerLinkActive="active" class="nav-btn">Mon profil</a>
       } 
       
+      @else if (isShelter()) {
+        <a routerLink="/matches" routerLinkActive="active" class="nav-btn">Matchs</a>
+        <a routerLink="/messages" routerLinkActive="active" class="nav-btn">Messages</a>
+        <a routerLink="/user-profile-form" routerLinkActive="active" class="nav-btn">Mon Profil</a>
+        
+      }
+
       @else {
         <a routerLink="/feed" routerLinkActive="active" class="nav-btn">Feed</a>
         <a routerLink="/matches" routerLinkActive="active" class="nav-btn">Matchs</a>
