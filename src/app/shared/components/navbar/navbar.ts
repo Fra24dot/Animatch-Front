@@ -22,6 +22,11 @@ private readonly authService = inject(AuthService);
     return payload?.accountType === 'Admin';
   });
 
+  isShelter = computed(() => {
+    const payload = this.authService.connectedUser();
+    return payload?.accountType === 'Shelter'; 
+  });
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/welcome']);

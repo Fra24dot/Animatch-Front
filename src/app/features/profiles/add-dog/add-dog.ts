@@ -15,9 +15,8 @@ import { Router } from '@angular/router';
 })
 export class AddDog implements OnInit {
    private fb = inject(FormBuilder);
-   private shelterDogService = inject(ShelterDogService);
-   private router = inject(Router);
-
+  private shelterDogService = inject(ShelterDogService);
+  private router = inject(Router);
 
   dogForm!: FormGroup;
   selectedFile: File | null = null;
@@ -28,54 +27,55 @@ export class AddDog implements OnInit {
   createdDog = signal<DogDetailResponse | null>(null);
   currentStep = signal<number>(1);
 
-  // Listes issues des configurations de Base de Données (Seed Data)
+  // Seed Data pour l'étape 3
   compatibilitiesList = [
-  { id: 1, name: 'Bon avec les enfants' },
-  { id: 2, name: 'Bon avec les animaux' },
-  { id: 3, name: 'Bon avec les inconnus' }
-];
+    { id: 1, name: 'Bon avec les enfants' },
+    { id: 2, name: 'Bon avec les animaux' },
+    { id: 3, name: 'Bon avec les inconnus' }
+  ];
 
-medicalHistoriesList = [
-  { id: 1, name: 'Allergies' },
-  { id: 2, name: 'Vacciné' },
-  { id: 3, name: 'Pucé' },
-  { id: 4, name: 'Stérilisé' },
-  { id: 5, name: 'Problèmes médicaux' }
-];
+  medicalHistoriesList = [
+    { id: 1, name: 'Allergies' },
+    { id: 2, name: 'Vacciné' },
+    { id: 3, name: 'Pucé' },
+    { id: 4, name: 'Stérilisé' },
+    { id: 5, name: 'Problèmes médicaux' }
+  ];
 
-personalitiesList = [
-  { id: 1, name: 'Joueur' },
-  { id: 2, name: 'Sensible' },
-  { id: 3, name: 'Protecteur' },
-  { id: 4, name: 'Affectueux' },
-  { id: 5, name: 'Indépendant' },
-  { id: 6, name: 'Intelligent' },
-  { id: 7, name: 'Timide' },
-  { id: 8, name: 'Sociable' },
-  { id: 9, name: 'Dominant' }
-];
+  personalitiesList = [
+    { id: 1, name: 'Joueur' },
+    { id: 2, name: 'Sensible' },
+    { id: 3, name: 'Protecteur' },
+    { id: 4, name: 'Affectueux' },
+    { id: 5, name: 'Indépendant' },
+    { id: 6, name: 'Intelligent' },
+    { id: 7, name: 'Timide' },
+    { id: 8, name: 'Sociable' },
+    { id: 9, name: 'Dominant' }
+  ];
 
-specialNeedsList = [
-  { id: 1, name: 'Anxiété' },
-  { id: 2, name: 'Peur des hommes' },
-  { id: 3, name: 'Peur des bruits' }
-];
+  specialNeedsList = [
+    { id: 1, name: 'Anxiété' },
+    { id: 2, name: 'Peur des hommes' },
+    { id: 3, name: 'Peur des bruits' }
+  ];
 
-races = ['Race pure', 'Croisé / Bâtard'];
-genders = ['Mâle', 'Femelle'];
-ageRanges = ['Chiot', 'Jeune', 'Adulte', 'Sénior'];
-sizes = ['Petit', 'Moyen', 'Grand', 'Très grand (XLarge)'];
-energyLevels = ['Faible', 'Modéré', 'Élevé'];
+  // Listes d'options indexées (0, 1, 2...) correspondant aux Enums du Backend
+  races = ['Race pure', 'Croisé / Bâtard'];
+  genders = ['Mâle', 'Femelle'];
+  ageRanges = ['Chiot', 'Jeune', 'Adulte', 'Sénior'];
+  sizes = ['Petit', 'Moyen', 'Grand', 'Très grand (XLarge)'];
+  energyLevels = ['Faible', 'Modéré', 'Élevé'];
 
   ngOnInit(): void {
     this.dogForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      race: [0, Validators.required],
+      race: ['', Validators.required],         // 🌟 Changé 0 en '' pour forcer le choix utilisateur dans le select
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      gender: [0, Validators.required],
-      ageRange: [0, Validators.required],
-      size: [0, Validators.required],
-      energyLevel: [0, Validators.required],
+      gender: ['', Validators.required],       // 🌟 Idem
+      ageRange: ['', Validators.required],     // 🌟 Idem
+      size: ['', Validators.required],         // 🌟 Idem
+      energyLevel: ['', Validators.required],  // 🌟 Idem
       personalityIds: [[]],
       specialNeedsIds: [[]],
       compatibilityIds: [[]],
@@ -106,53 +106,64 @@ energyLevels = ['Faible', 'Modéré', 'Élevé'];
   }
 
   onSubmit(): void {
-    if (this.dogForm.invalid) return;
-
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-    this.createdDog.set(null);
-
-    const formValue = this.dogForm.value;
-
-    const requestData: AddDogRequest = {
-      name: formValue.name,
-      race: +formValue.race,
-      description: formValue.description,
-      gender: +formValue.gender,
-      ageRange: +formValue.ageRange,
-      size: +formValue.size,
-      energyLevel: +formValue.energyLevel,
-      personalityIds: formValue.personalityIds,
-      specialNeedsIds: formValue.specialNeedsIds,
-      compatibilityIds: formValue.compatibilityIds,
-      medicalHistoryIds: formValue.medicalHistoryIds,
-      mediaFile: this.selectedFile || undefined
-    };
-
-    this.shelterDogService.addDog(requestData).subscribe({
-      next: (response) => {
-        this.isLoading.set(false);
-        this.createdDog.set(response.dog);
-        this.selectedFile = null;
-        
-        // Un seul reset global et sécurisé pour éviter les crashs sur les tableaux
-        this.dogForm.reset({ 
-          race: 0, 
-          gender: 0, 
-          ageRange: 0, 
-          size: 0, 
-          energyLevel: 0,
-          personalityIds: [],
-          specialNeedsIds: [],
-          compatibilityIds: [],
-          medicalHistoryIds: []
-        });
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        const backendError = err.error?.details || "An error occurred during save.";
-        this.errorMessage.set(backendError);
-      }
-    });
+    if (this.dogForm.invalid || this.isLoading()) {
+    this.dogForm.markAllAsTouched();
+    return;
   }
+
+  this.isLoading.set(true);
+  this.errorMessage.set(null);
+  this.createdDog.set(null);
+
+  const formValue = this.dogForm.value;
+
+  const requestData: AddDogRequest = {
+    name: formValue.name,
+    race: +formValue.race,
+    description: formValue.description,
+    gender: +formValue.gender,
+    ageRange: +formValue.ageRange,
+    size: +formValue.size,
+    energyLevel: +formValue.energyLevel,
+    personalityIds: formValue.personalityIds || [],
+    specialNeedsIds: formValue.specialNeedsIds || [],
+    compatibilityIds: formValue.compatibilityIds || [],
+    medicalHistoryIds: formValue.medicalHistoryIds || [],
+    mediaFile: this.selectedFile || undefined
+  };
+
+  this.shelterDogService.addDog(requestData).subscribe({
+    next: (response) => {
+      // 🌟 L'astuce : On met à jour l'UI d'abord
+      this.createdDog.set(response?.dog || response);
+      this.isLoading.set(false);
+      this.selectedFile = null;
+      this.currentStep.set(1);
+      
+      // 🌟 Reset complet incluant la réinitialisation des états de validation d'Angular (Pristine / Untouched)
+      this.dogForm.reset({ 
+        name: '',
+        description: '',
+        race: '', 
+        gender: '', 
+        ageRange: '', 
+        size: '', 
+        energyLevel: '',
+        personalityIds: [],
+        specialNeedsIds: [],
+        compatibilityIds: [],
+        medicalHistoryIds: []
+      });
+
+      // Force Angular à oublier les erreurs de validation suite au reset général
+      this.dogForm.markAsPristine();
+      this.dogForm.markAsUntouched();
+    },
+    error: (err) => {
+      this.isLoading.set(false);
+      const backendError = err.error?.details || err.error?.message || "Une erreur est survenue lors de la sauvegarde.";
+      this.errorMessage.set(backendError);
+    }
+  });
+}
 }
