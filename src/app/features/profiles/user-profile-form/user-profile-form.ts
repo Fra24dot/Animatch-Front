@@ -25,22 +25,22 @@ export class UserProfileForm implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      // Étape 1 : Foyer
+      // Étape 1: Foyer
       city: ['', [Validators.required, Validators.maxLength(100)]],
       housingType: [0, Validators.required], // Reçoit l'entier de l'enum
       peopleCount: [1, [Validators.required, Validators.min(1)]],
       hasChildren: [false],
       petsAllowed: [true],
 
-      // Étape 2 : Expérience
+      // Étape 2: Expérience
       hasAnimals: [false],
       animalsCount: [0, [Validators.required, Validators.min(0)]],
       animalType: [0,Validators.required], 
       alreadyAdopted: [false],
       adoptionPermit: [false],
 
-      // Étape 3 : Mode de vie
-      jobType: [0, Validators.required], // Reçoit l'entier de l'enum
+      // Étape 3: Mode de vie
+      jobType: [0, Validators.required], 
       remoteWork: [false],
       dogAloneHours: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
       activeLifestyle: [false],
@@ -80,7 +80,6 @@ export class UserProfileForm implements OnInit {
       }
   }
 
-  // Si on arrive ici, l'étape en cours est valide ! On nettoie le message d'erreur et on avance
   this.errorMessage.set(null);
   
   if (this.currentStep() < 3) {
@@ -120,7 +119,7 @@ export class UserProfileForm implements OnInit {
       }
     };
 
-    // Envoi des données au service de signaux
+    
     this.profileService.saveProfile(profilePayload);
     
     this.isLoading.set(false);

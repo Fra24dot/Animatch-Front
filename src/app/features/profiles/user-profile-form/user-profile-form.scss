@@ -13,19 +13,15 @@
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  
-  /* 🌟 COMPACTAGE 1 : On réduit drastiquement le padding vertical (haut/bas) */
   padding: 1.5rem 2rem; 
-  
   text-align: center;
   z-index: 10;
   width: 90%;
-  max-width: 500px; /* Un poil plus étroit pour un look plus équilibré */
-  overflow: hidden; /* Garde le slider horizontal propre */
+  max-width: 500px; 
+  overflow: hidden; 
   position: relative; 
 
   h1 {
-    /* 🌟 COMPACTAGE 2 : Titre plus discret et moins de marge en dessous */
     font-size: 1.8rem;
     color: #E63946;
     margin-bottom: 1rem;
@@ -39,7 +35,7 @@
     padding: 0;
   }
 
-  /* --- LE SLIDER POUR 3 ÉTAPES (300%) --- */
+  
   .form-slider {
     display: flex;
     width: 300%; 
@@ -60,7 +56,7 @@
     }
   }
 
-  /* --- CHAQUE ÉTAPE --- */
+  
   .form-step {
     width: 33.3333%; 
     flex-shrink: 0; 
@@ -69,7 +65,7 @@
     transition: opacity 0.3s ease-in-out, visibility 0.3s;
 
     h3 {
-      /* 🌟 COMPACTAGE 3 : Sous-titre plus petit et plus proche de la grille */
+      
       font-size: 1.1rem;
       color: #555555;
       margin-bottom: 0.8rem;
@@ -80,14 +76,12 @@
     &.step-2, &.step-3 { opacity: 0; visibility: hidden; }
   }
 
-  /* --- LA GRILLE DES INPUTS EN MODE COMPACT --- */
+  
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* 🌟 COMPACTAGE 4 : On réduit l'espace entre les lignes d'inputs */
     gap: 0.75rem; 
-    margin-bottom: 1.2rem; /* Moins d'espace vide sous la grille */
-    
+    margin-bottom: 1.2rem; 
     width: calc(100% - 1rem); 
     margin-left: 0.5rem;        
     margin-right: 0.5rem;
@@ -131,7 +125,6 @@
 
       input, select {
         width: 100%;
-        /* 🌟 COMPACTAGE 5 : On réduit la hauteur interne des champs de saisie */
         padding: 0.55rem 0.8rem; 
         border: 1px solid #cccccc;
         border-radius: 8px; 
@@ -147,13 +140,12 @@
     }
   }
 
-  /* --- BOUTONS --- */
+  
   .btn-next, .btn-next-step, .btn-register {
     background-color: #E63946;
     color: white;
     border: none;
     border-radius: 8px;
-    /* 🌟 COMPACTAGE 6 : Boutons légèrement moins épais */
     padding: 0.7rem 2rem;
     font-size: 0.95rem;
     font-weight: bold;

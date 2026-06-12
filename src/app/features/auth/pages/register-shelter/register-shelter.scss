@@ -22,12 +22,9 @@ html, body {
   padding: 2.5rem 2rem; 
   text-align: center;
   z-index: 10;
-  
   width: 90%;
   max-width: 540px;
-  overflow: hidden; /* Cache les étapes inactives sur les côtés */
-
-  /* 🌟 POSITIONNEMENT ROBUSTE ET PARFAITEMENT CENTRÉ 🌟 */
+  overflow: hidden; 
   position: absolute;
   top: 55%; 
   left: 50%;
@@ -47,7 +44,6 @@ html, body {
     padding: 0;
   }
 
-  /* --- LE SLIDER ANIMÉ À 3 ÉTAPES (300%) --- */
   .form-slider {
     display: flex;
     width: 300%; 
@@ -68,11 +64,11 @@ html, body {
     }
   }
 
-  /* --- CHAQUE ÉTAPE INDIVIDUELLE --- */
+  
   .form-step {
     width: 33.3333%; 
     flex-shrink: 0; 
-    padding: 0 1.5rem; /* Espace équilibré gauche/droite pour centrer les inputs */
+    padding: 0 1.5rem; 
     display: flex;
     flex-direction: column;
     align-items: center; 
@@ -83,7 +79,7 @@ html, body {
     &.step-3 { opacity: 0; visibility: hidden; }
   }
 
-  /* --- LA GRILLE DES INPUTS --- */
+  
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -125,7 +121,7 @@ html, body {
     }
   }
 
-  /* --- STYLISATION DES BOUTONS --- */
+  
   .btn-next, .btn-register, .btn-next-step {
     background-color: #E63946;
     color: white;

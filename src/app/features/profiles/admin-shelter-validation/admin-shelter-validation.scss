@@ -23,7 +23,7 @@
   }
 }
 
-/* --- LISTE & CARTES --- */
+
 .shelters-list {
   display: flex;
   flex-direction: column;
@@ -104,7 +104,7 @@
         &.company-number {
           font-family: 'Courier New', Courier, monospace;
           font-weight: 700;
-          color: #e63946; // Accentuation sur le n° d'entreprise
+          color: #e63946; 
           font-size: 1.05rem;
         }
       }
@@ -112,7 +112,7 @@
   }
 }
 
-/* --- BOUTONS D'ACTION --- */
+
 .shelter-actions {
   display: flex;
   flex-direction: column;
@@ -155,7 +155,7 @@
   }
 }
 
-/* --- ÉTATS CHARGEMENT, ERREUR & VIDE --- */
+
 .empty-state {
   text-align: center;
   padding: 5rem 2rem;
@@ -227,7 +227,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* --- RESPONSIVE DESKTOP VS MOBILE --- */
+
 @media (max-width: 768px) {
   .shelter-card {
     flex-direction: column;

@@ -21,7 +21,7 @@ export class AuthService {
     const savedPayload = this.storage.getLocal<JwtPayload>('payload');
     
     if (savedPayload) {
-      // Sécurité supplémentaire : On vérifie si le token n'est pas expiré (exp est en secondes)
+      // Sécurité supplémentaire > On vérifie si le token n'est pas expiré 
       const currentTime = Math.floor(Date.now() / 1000);
       if (savedPayload.exp && savedPayload.exp < currentTime) {
         this.logout(); // Expired ! On nettoie tout
