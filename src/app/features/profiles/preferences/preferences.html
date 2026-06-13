@@ -1,0 +1,131 @@
+<app-navbar></app-navbar>
+
+
+<app-paw-background>
+<div class="profile-box">
+  <h1>🐾 Mes Préférences</h1>
+
+  @if (successMessage()) {
+    <div class="alert alert-success">{{ successMessage() }}</div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-danger">{{ errorMessage() }}</div>
+  }
+
+  <form [formGroup]="prefForm" (ngSubmit)="onSubmit()">
+    <div class="form-slider" [ngClass]="{ 'step-two': currentStep() === 2, 'step-three': currentStep() === 3 }">
+      
+      <div class="form-step step-1">
+        <h3>1. Distance & Taille</h3>
+        <div class="form-grid">
+          
+          <div class="form-group full-width">
+            <label for="maxDistance">Distance Maximale : <strong>{{ prefForm.get('maxDistance')?.value }} km</strong></label>
+            <input type="range" id="maxDistance" formControlName="maxDistance" min="5" max="500" step="5">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Taille du chien</label>
+            <div class="checkbox-grid">
+              @for (size of sizesList; track size.id) {
+                <label class="checkbox-tile">
+                  <input type="checkbox" 
+                         [checked]="isIdChecked('dogSizeIds', size.id)"
+                         (change)="onCheckboxChange('dogSizeIds', size.id, $event)">
+                  <span class="tile-content">{{ size.name }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+        </div>
+        
+        <button type="button" class="btn-next" (click)="nextStep()">Suivant</button>
+      </div>
+
+      <div class="form-step step-2">
+        <h3>2. Sexe & Tranches d'âge</h3>
+        <div class="form-grid">
+          
+          <div class="form-group full-width">
+            <label>Sexe recherché</label>
+            <div class="checkbox-grid">
+              @for (gender of gendersList; track gender.id) {
+                <label class="checkbox-tile">
+                  <input type="checkbox" 
+                         [checked]="isIdChecked('dogGenderIds', gender.id)"
+                         (change)="onCheckboxChange('dogGenderIds', gender.id, $event)">
+                  <span class="tile-content">{{ gender.name }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Tranches d'âge</label>
+            <div class="checkbox-grid">
+              @for (age of agesList; track age.id) {
+                <label class="checkbox-tile">
+                  <input type="checkbox" 
+                         [checked]="isIdChecked('dogAgeIds', age.id)"
+                         (change)="onCheckboxChange('dogAgeIds', age.id, $event)">
+                  <span class="tile-content">{{ age.name }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <div class="step-buttons">
+          <button type="button" class="btn-prev" (click)="prevStep()">Retour</button>
+          <button type="button" class="btn-next-step" (click)="nextStep()">Suivant</button>
+        </div>
+      </div>
+
+      <div class="form-step step-3">
+        <h3>3. Énergie & Races</h3>
+        <div class="form-grid">
+          
+          <div class="form-group full-width">
+            <label>Niveau d'énergie idéal</label>
+            <div class="checkbox-grid">
+              @for (level of energyLevelsList; track level.id) {
+                <label class="checkbox-tile">
+                  <input type="checkbox" 
+                         [checked]="isIdChecked('energyLevelIds', level.id)"
+                         (change)="onCheckboxChange('energyLevelIds', level.id, $event)">
+                  <span class="tile-content">{{ level.name }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Type de race</label>
+            <div class="checkbox-grid">
+              @for (race of racesList; track race.id) {
+                <label class="checkbox-tile">
+                  <input type="checkbox" 
+                         [checked]="isIdChecked('dogRaceIds', race.id)"
+                         (change)="onCheckboxChange('dogRaceIds', race.id, $event)">
+                  <span class="tile-content">{{ race.name }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <div class="step-buttons">
+          <button type="button" class="btn-prev" (click)="prevStep()">Retour</button>
+          <button type="submit" class="btn-register" [disabled]="prefForm.invalid || isLoading()">
+            {{ isLoading() ? 'Enregistrement...' : 'Soumettre' }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+</app-paw-background>
