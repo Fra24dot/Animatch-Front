@@ -37,7 +37,7 @@ export class Login {
         next: () => {
           this.isLoading.set(false);
 
-          // Récupère le rôle de l'utilisateur connecté pour l'aiguiller
+          // Récupère le rôle de l'utilisateur 
           const accountType = this.authService.connectedUser()?.accountType;
 
           if (accountType === 'Admin') {

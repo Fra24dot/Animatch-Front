@@ -47,7 +47,7 @@ errorMessage = signal<string | null>(null);
   validateShelter(id: string): void {
     this.adminService.approveShelter(id).subscribe({
       next: (response) => {
-        // Supprime de la liste locale si le back a validé
+        
         this.shelters.update(list => list.filter(s => s.id !== id));
         alert(response.message || 'Le chenil a été validé !');
       },

@@ -21,13 +21,13 @@ export class AddDog implements OnInit {
   dogForm!: FormGroup;
   selectedFile: File | null = null;
 
-  // Signaux pour la gestion d'état local
+  
   isLoading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
   createdDog = signal<DogDetailResponse | null>(null);
   currentStep = signal<number>(1);
 
-  // Seed Data pour l'étape 3
+  
   compatibilitiesList = [
     { id: 1, name: 'Bon avec les enfants' },
     { id: 2, name: 'Bon avec les animaux' },
@@ -60,7 +60,7 @@ export class AddDog implements OnInit {
     { id: 3, name: 'Peur des bruits' }
   ];
 
-  // Listes d'options indexées (0, 1, 2...) correspondant aux Enums du Backend
+  
   races = ['Race pure', 'Croisé / Bâtard'];
   genders = ['Mâle', 'Femelle'];
   ageRanges = ['Chiot', 'Jeune', 'Adulte', 'Sénior'];
@@ -70,12 +70,12 @@ export class AddDog implements OnInit {
   ngOnInit(): void {
     this.dogForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      race: ['', Validators.required],         // 🌟 Changé 0 en '' pour forcer le choix utilisateur dans le select
+      race: ['', Validators.required],         
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      gender: ['', Validators.required],       // 🌟 Idem
-      ageRange: ['', Validators.required],     // 🌟 Idem
-      size: ['', Validators.required],         // 🌟 Idem
-      energyLevel: ['', Validators.required],  // 🌟 Idem
+      gender: ['', Validators.required],       
+      ageRange: ['', Validators.required],     
+      size: ['', Validators.required],         
+      energyLevel: ['', Validators.required],  
       personalityIds: [[]],
       specialNeedsIds: [[]],
       compatibilityIds: [[]],
@@ -134,13 +134,13 @@ export class AddDog implements OnInit {
 
   this.shelterDogService.addDog(requestData).subscribe({
     next: (response) => {
-      // 🌟 L'astuce : On met à jour l'UI d'abord
+      
       this.createdDog.set(response?.dog || response);
       this.isLoading.set(false);
       this.selectedFile = null;
       this.currentStep.set(1);
       
-      // 🌟 Reset complet incluant la réinitialisation des états de validation d'Angular (Pristine / Untouched)
+      
       this.dogForm.reset({ 
         name: '',
         description: '',
@@ -155,7 +155,7 @@ export class AddDog implements OnInit {
         medicalHistoryIds: []
       });
 
-      // Force Angular à oublier les erreurs de validation suite au reset général
+      
       this.dogForm.markAsPristine();
       this.dogForm.markAsUntouched();
     },

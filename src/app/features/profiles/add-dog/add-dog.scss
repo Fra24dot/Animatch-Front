@@ -11,7 +11,7 @@
   min-height: calc(100vh - 70px) !important;
 }
 
-/* 2. FORCE le composant de pattes à prendre TOUTE la largeur de la fenêtre */
+
 :host ::ng-deep app-paw-background {
   display: block !important;
   width: 100vw !important;
@@ -19,14 +19,14 @@
   position: relative !important;
 }
 
-/* 3. TARGET CRITIQUE : Force le conteneur HTML interne (la div des pattes) à faire 100% de la largeur */
+
 :host ::ng-deep app-paw-background > div,
 :host ::ng-deep app-paw-background .paw-container, 
 :host ::ng-deep app-paw-background .background-wrapper {
   width: 100vw !important;
   min-height: 100% !important;
   display: flex !important;
-  justify-content: center !important; /* Garde ton formulaire au centre */
+  justify-content: center !important; 
   align-items: center !important;
 }
 
@@ -41,7 +41,7 @@
   max-width: 480px;        
   overflow: hidden;        
   position: relative; 
-  margin: 0 auto !important; /* Aligne horizontalement au centre */
+  margin: 0 auto !important; 
 
   h1 {
     font-size: 1.8rem;
@@ -57,7 +57,7 @@
     padding: 0;
   }
 
-  /* --- LE SLIDER POUR 3 ÉTAPES (300%) --- */
+  
   .form-slider {
     display: flex;
     width: 300%; 
@@ -78,7 +78,7 @@
     }
   }
 
-  /* --- CHAQUE ÉTAPE --- */
+  
   .form-step {
     width: 33.3333%; 
     flex-shrink: 0; 
@@ -97,7 +97,7 @@
     &.step-2, &.step-3 { opacity: 0; visibility: hidden; }
   }
 
-  /* --- LA GRILLE DES INPUTS EN MODE COMPACT --- */
+  
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -184,7 +184,7 @@
     }
   }
 
-  /* --- BOUTONS --- */
+  
   .btn-next, .btn-next-step, .btn-register {
     background-color: #E63946;
     color: white;
@@ -229,7 +229,7 @@
     .btn-next-step, .btn-register { flex: 1; }
   }
 
-  /* --- BANNIÈRES DE STATUT --- */
+  
   .status-message {
     padding: 1rem;
     border-radius: 8px;

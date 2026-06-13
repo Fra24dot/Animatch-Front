@@ -1,14 +1,14 @@
 .navbar {
   height: 60px;
-  background-color: #E63946; /* Ton rouge de marque Animatch */
+  background-color: #E63946; 
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Aligne les blocs aux extrémités */
+  justify-content: space-between; 
   padding: 0 2rem;
   font-family: 'Rethink Sans', sans-serif;
   color: white;
   position: relative;
-  z-index: 100; /* Reste toujours au-dessus du fond rose */
+  z-index: 100; 
 
   .navbar-left {
     font-size: 1rem;
@@ -31,14 +31,12 @@
       cursor: default; 
     }
     
-    // Si l'utilisateur est connecté, on pousse le logo un peu vers la gauche si besoin,
-    // mais space-between va naturellement gérer l'espace avec la navbar-right.
   }
 
   .navbar-right {
     display: flex;
     align-items: center;
-    gap: 1.2rem; /* Espace entre chaque bouton */
+    gap: 1.2rem; 
 
     .nav-btn {
       color: white;
@@ -53,7 +51,7 @@
         background-color: rgba(255, 255, 255, 0.15);
       }
 
-      /* Style pour le lien de la page active */
+      
       &.active {
         background-color: rgba(255, 255, 255, 0.25);
         font-weight: bold;
@@ -81,8 +79,7 @@
   }
 }
 
-/* --- OPTION RESPONSIVE RAPIDE --- 
-   Si l'écran est trop petit, on réduit les écritures pour éviter que ça déborde */
+
 @media (max-width: 768px) {
   .navbar {
     padding: 0 1rem;

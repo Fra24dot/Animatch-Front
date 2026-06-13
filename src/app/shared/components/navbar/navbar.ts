@@ -12,11 +12,10 @@ export class Navbar {
 private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // Vérifie si l'utilisateur est connecté
+  
   isLogged = computed(() => this.authService.connectedUser() !== null);
 
-  // Extrait le rôle de l'utilisateur ('Admin', 'User', 'Shelter', etc.)
-  // On utilise StringComparison implicite en TS en vérifiant la valeur exacte
+  
   isAdmin = computed(() => {
     const payload = this.authService.connectedUser();
     return payload?.accountType === 'Admin';
