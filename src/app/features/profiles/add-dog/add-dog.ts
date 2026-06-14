@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './add-dog.scss',
 })
 export class AddDog implements OnInit {
-   private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private shelterDogService = inject(ShelterDogService);
   private router = inject(Router);
 

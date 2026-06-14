@@ -1,0 +1,107 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
+<div class="feed-container">
+
+  @if (isLoading()) {
+    <div class="loader-container">
+      <div class="spinner"></div>
+      <p>Recherche des chiens autour de vous... 🐾</p>
+    </div>
+  }
+
+  @else if (redirectCode()) {
+    <div class="fallback-card">
+      <div class="icon-warning">⚠️</div>
+      <h3>Oups ! Votre profil n'est pas prêt</h3>
+      <p>{{ errorMessage() }}</p>
+      
+      <div class="fallback-actions">
+        @if (redirectCode() === 'PROFILE_INCOMPLETE') {
+          <button (click)="goToProfile()" class="btn btn-primary">
+            Compléter mon profil de vie
+          </button>
+        } @else if (redirectCode() === 'PREFERENCES_MISSING') {
+          <button (click)="goToPreferences()" class="btn btn-primary">
+            Configurer mes préférences
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @else if (!currentDog()) {
+    <div class="fallback-card">
+      <div class="icon-empty">🐶</div>
+      <h3>Fin du flux !</h3>
+      <p>Il n'y a plus de chiens correspondants à vos critères pour le moment. Revenez plus tard ou élargissez votre périmètre !</p>
+      <button (click)="goToPreferences()" class="btn btn-secondary">
+        Modifier mes critères
+      </button>
+    </div>
+  }
+
+  @else {
+    <div class="swipe-card">
+      
+      <div class="card-header">
+        <img [src]="currentDog()?.mainImageUrl || 'assets/images/default-dog.png'" 
+             [alt]="currentDog()?.name" 
+             class="dog-image">
+        
+        <div class="header-overlay">
+          <h2>{{ currentDog()?.name }}, <span>{{ currentDog()?.raceName }}</span></h2>
+          <p class="location">
+            <i class="fa-solid fa-location-dot"></i> 
+            À {{ currentDog()?.distanceInKm }} km • {{ currentDog()?.shelterName }}
+          </p>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="badges-row">
+          <span class="badge gender">{{ currentDog()?.gender }}</span>
+          <span class="badge size">{{ currentDog()?.size }}</span>
+          <span class="badge age">{{ currentDog()?.ageRange }}</span>
+          <span class="badge energy">⚡ {{ currentDog()?.energyLevel }}</span>
+        </div>
+
+        <p class="description">{{ currentDog()?.description }}</p>
+
+        @if (currentDog()?.personalities?.length) {
+          <div class="traits-section">
+            <p class="section-title">Caractère</p>
+            <div class="pill-group">
+              @for (trait of currentDog()?.personalities; track trait) {
+                <span class="pill-personality">{{ trait }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (currentDog()?.compatibilities?.length) {
+          <div class="traits-section">
+            <p class="section-title">S'entend avec</p>
+            <div class="pill-group">
+              @for (comp of currentDog()?.compatibilities; track comp) {
+                <span class="pill-compatibility">{{ comp }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="card-footer">
+        <button (click)="onSwipe(false)" class="btn-round dislike" title="Dislike">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button (click)="onSwipe(true)" class="btn-round like" title="Like">
+          <i class="fa-solid fa-heart"></i>
+        </button>
+      </div>
+
+    </div>
+  }
+
+</div>
+</app-paw-background>
