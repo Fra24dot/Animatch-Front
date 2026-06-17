@@ -11,6 +11,7 @@ import { Preferences } from './features/profiles/preferences/preferences';
 import { Feed } from './features/feed/feed';
 import { AdopterLike } from './features/matches/adopter-like/adopter-like';
 import { ShelterMatches } from './features/matches/shelter-matches/shelter-matches';
+import { feedGuard } from './core/guards/feed-guard';
 
 export const routes: Routes = [
     { path: '', component: Welcome },
@@ -22,7 +23,7 @@ export const routes: Routes = [
     { path: 'admin-shelter-validation', component: AdminShelterValidation },
     { path: 'add-dog', component: AddDog },
     { path: 'preferences', component: Preferences },
-    { path: 'feed', component: Feed},
+    { path: 'feed', component: Feed, canActivate: [feedGuard] },
     { path: 'adopter-like', component: AdopterLike },
     {path: 'shelter-matches', component : ShelterMatches},
 
