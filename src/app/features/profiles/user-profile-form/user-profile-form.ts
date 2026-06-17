@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { PawBackground } from '../../../shared/components/paw-background/paw-background';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { UserProfileRequest } from '../../../shared/components/models/userProfile.model';
+import { GeolocationService } from '../../../core/services/geolocation.service';
 
 @Component({
   selector: 'app-user-profile-form',
@@ -15,6 +16,7 @@ import { UserProfileRequest } from '../../../shared/components/models/userProfil
 export class UserProfileForm implements OnInit {
   private fb = inject(FormBuilder);
   private profileService = inject(UserProfileService);
+  private geoService = inject(GeolocationService); // 🌟 Injection du service de géocodage
   private router = inject(Router);
 
   public currentStep = signal<number>(1);
@@ -27,7 +29,7 @@ export class UserProfileForm implements OnInit {
     this.form = this.fb.group({
       // Étape 1: Foyer
       city: ['', [Validators.required, Validators.maxLength(100)]],
-      housingType: [0, Validators.required], // Reçoit l'entier de l'enum
+      housingType: [0, Validators.required],
       peopleCount: [1, [Validators.required, Validators.min(1)]],
       hasChildren: [false],
       petsAllowed: [true],
@@ -35,7 +37,7 @@ export class UserProfileForm implements OnInit {
       // Étape 2: Expérience
       hasAnimals: [false],
       animalsCount: [0, [Validators.required, Validators.min(0)]],
-      animalType: [0,Validators.required], 
+      animalType: [0, Validators.required], 
       alreadyAdopted: [false],
       adoptionPermit: [false],
 
@@ -49,43 +51,36 @@ export class UserProfileForm implements OnInit {
   }
 
   nextStep() {
-  
-  if (this.currentStep() === 1) {
-    const cityControl = this.form.get('city');
-    const housingControl = this.form.get('housingType');
-    const peopleControl = this.form.get('peopleCount');
+    if (this.currentStep() === 1) {
+      const cityControl = this.form.get('city');
+      const housingControl = this.form.get('housingType');
+      const peopleControl = this.form.get('peopleCount');
 
-    
-    cityControl?.markAsTouched();
-    housingControl?.markAsTouched();
-    peopleControl?.markAsTouched();
+      cityControl?.markAsTouched();
+      housingControl?.markAsTouched();
+      peopleControl?.markAsTouched();
 
-    
-    if (cityControl?.invalid || housingControl?.invalid || peopleControl?.invalid) {
-      this.errorMessage.set("Veuillez remplir correctement les informations de votre foyer avant de continuer.");
-      return; 
+      if (cityControl?.invalid || housingControl?.invalid || peopleControl?.invalid) {
+        this.errorMessage.set("Veuillez remplir correctement les informations de votre foyer avant de continuer.");
+        return; 
+      }
     }
-  }
 
-  
-  if (this.currentStep() === 2) {
-   const step2Valid = this.form.get('animalsCount')?.valid && 
-                         this.form.get('animalType')?.valid;
-    
-   
+    if (this.currentStep() === 2) {
+      const step2Valid = this.form.get('animalsCount')?.valid && this.form.get('animalType')?.valid;
 
-    if (!step2Valid) {
+      if (!step2Valid) {
         this.errorMessage.set("Veuillez vérifier les informations de l'étape 2.");
         return;
       }
+    }
+
+    this.errorMessage.set(null);
+    if (this.currentStep() < 3) {
+      this.currentStep.update(step => step + 1);
+    }
   }
 
-  this.errorMessage.set(null);
-  
-  if (this.currentStep() < 3) {
-    this.currentStep.update(step => step + 1);
-   }
-  }
   prevStep() {
     if (this.currentStep() > 1) {
       this.currentStep.update(step => step - 1);
@@ -93,36 +88,62 @@ export class UserProfileForm implements OnInit {
   }
 
   onSubmit() {
+    if (this.form.invalid) return;
+
+    this.isLoading.set(true);
     const rawValues = this.form.value;
 
-    const profilePayload: UserProfileRequest = {
-      familyCondition: {
-        city: rawValues.city,
-        housingType: Number(rawValues.housingType),
-        peopleCount: rawValues.peopleCount,
-        hasChildren: rawValues.hasChildren,
-        petsAllowed: rawValues.petsAllowed
-      },
-      experience: {
-        hasAnimals: rawValues.hasAnimals,
-        animalsCount: rawValues.animalsCount,
-        animalType: Number(rawValues.animalType), 
-        alreadyAdopted: rawValues.alreadyAdopted,
-        adoptionPermit: rawValues.adoptionPermit
-      },
-      lifestyle: {
-        jobType: Number(rawValues.jobType),
-        remoteWork: rawValues.remoteWork,
-        dogAloneHours: rawValues.dogAloneHours,
-        activeLifestyle: rawValues.activeLifestyle,
-        financiallyStable: rawValues.financiallyStable
-      }
-    };
+   
+    this.geoService.getCoordinatesFromCity(rawValues.city).subscribe({
+      next: (coords) => {
+        
+        
+        const profilePayload: UserProfileRequest = {
+          familyCondition: {
+            city: rawValues.city,
+            latitude: coords ? coords.latitude : null,   
+            longitude: coords ? coords.longitude : null, 
+            housingType: Number(rawValues.housingType),
+            peopleCount: rawValues.peopleCount,
+            hasChildren: rawValues.hasChildren,
+            petsAllowed: rawValues.petsAllowed
+          },
+          experience: {
+            hasAnimals: rawValues.hasAnimals,
+            animalsCount: rawValues.animalsCount,
+            animalType: Number(rawValues.animalType), 
+            alreadyAdopted: rawValues.alreadyAdopted,
+            adoptionPermit: rawValues.adoptionPermit
+          },
+          lifestyle: {
+            jobType: Number(rawValues.jobType),
+            remoteWork: rawValues.remoteWork,
+            dogAloneHours: rawValues.dogAloneHours,
+            activeLifestyle: rawValues.activeLifestyle,
+            financiallyStable: rawValues.financiallyStable
+          }
+        };
 
-    
-    this.profileService.saveProfile(profilePayload);
-    
-    this.isLoading.set(false);
-    this.router.navigate(['/profile']); 
+        
+        this.profileService.saveProfile(profilePayload);
+        
+        this.isLoading.set(false);
+        this.router.navigate(['/preferences']); 
+      },
+      error: (err) => {
+        console.error("Échec du calcul des coordonnées de la ville, sauvegarde classique.", err);
+        
+        
+        const fallbackPayload = {
+          familyCondition: { city: rawValues.city, latitude: null, longitude: null, housingType: Number(rawValues.housingType), peopleCount: rawValues.peopleCount, hasChildren: rawValues.hasChildren, petsAllowed: rawValues.petsAllowed },
+          experience: { hasAnimals: rawValues.hasAnimals, animalsCount: rawValues.animalsCount, animalType: Number(rawValues.animalType), alreadyAdopted: rawValues.alreadyAdopted, adoptionPermit: rawValues.adoptionPermit },
+          lifestyle: { jobType: Number(rawValues.jobType), remoteWork: rawValues.remoteWork, dogAloneHours: rawValues.dogAloneHours, activeLifestyle: rawValues.activeLifestyle, financiallyStable: rawValues.financiallyStable }
+        };
+        
+        this.profileService.saveProfile(fallbackPayload as any);
+        this.isLoading.set(false);
+        this.router.navigate(['/preferences']);
+      }
+    });
   }
 }

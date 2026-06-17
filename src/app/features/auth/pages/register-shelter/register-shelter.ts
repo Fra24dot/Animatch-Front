@@ -6,6 +6,7 @@ import { Navbar } from '../../../../shared/components/navbar/navbar';
 import { passwordMatchValidator } from '../../../../shared/validators/password-validator';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ShelterRegister } from '../../../../shared/components/models/auth.model';
+import { GeolocationService } from '../../../../core/services/geolocation.service';
 
 @Component({
   selector: 'app-register-shelter',
@@ -15,8 +16,9 @@ import { ShelterRegister } from '../../../../shared/components/models/auth.model
 })
 export class RegisterShelter {
 private readonly fb = inject(FormBuilder);
-private readonly router = inject(Router);
-private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly geoService = inject(GeolocationService); // 🌟 Injection du service de géocodage
 
   currentStep = signal<number>(1);
   isLoading = signal<boolean>(false);
@@ -39,77 +41,109 @@ private readonly authService = inject(AuthService);
   });
 
   nextStep() {
-  if (this.currentStep() === 1) {
-    const step1Valid = this.form.get('name')?.valid && 
-                       this.form.get('companyNumber')?.valid && 
-                       this.form.get('creationYear')?.valid;
-    if (!step1Valid) {
-      this.form.get('name')?.markAsTouched();
-      this.form.get('companyNumber')?.markAsTouched();
-      return; 
-    }
-  }
-
-  if (this.currentStep() === 2) {
-    
-    const step2Valid = this.form.get('address')?.valid && 
-                       this.form.get('city')?.valid && 
-                       this.form.get('postalCode')?.valid && 
-                       this.form.get('phoneNumber')?.valid;
-    if (!step2Valid) return; 
-  }
-
-  if (this.currentStep() < 3) {
-    this.currentStep.update(step => step + 1);
-  }
-}
-
-
-prevStep() {
-  if (this.currentStep() > 1) {
-    this.currentStep.update(step => step - 1);
-  }
-}
-
- onSubmit() {
-  if (this.form.invalid) return;
-
-  this.isLoading.set(true);
-  this.errorMessage.set(null); 
-
-  
-  const rawValues = this.form.value;
-  
-  
-  const payload: ShelterRegister = {
-    name: rawValues.name!,
-    companyNumber: rawValues.companyNumber!,
-    creationYear: Number(rawValues.creationYear), 
-    phoneNumber: rawValues.phoneNumber!,
-    address: rawValues.address!,
-    city: rawValues.city!,
-    postalCode: rawValues.postalCode!,
-    email: rawValues.email!,
-    password: rawValues.password!
-  };
-  
-  
-  this.authService.registerShelter(payload).subscribe({
-    next: () => {
-      this.isLoading.set(false);
-      console.log('Refuge enregistré avec succès !');
-      this.router.navigate(['/login']); 
-    },
-    error: (err) => {
-      this.isLoading.set(false);
-      
-      if (err.error?.message) {
-        this.errorMessage.set(err.error.message);
-      } else {
-        this.errorMessage.set("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+    if (this.currentStep() === 1) {
+      const step1Valid = this.form.get('name')?.valid && 
+                         this.form.get('companyNumber')?.valid && 
+                         this.form.get('creationYear')?.valid;
+      if (!step1Valid) {
+        this.form.get('name')?.markAsTouched();
+        this.form.get('companyNumber')?.markAsTouched();
+        return; 
       }
-      console.error('Erreur inscription :', err);
     }
-  });
-}
+
+    if (this.currentStep() === 2) {
+      const step2Valid = this.form.get('address')?.valid && 
+                         this.form.get('city')?.valid && 
+                         this.form.get('postalCode')?.valid && 
+                         this.form.get('phoneNumber')?.valid;
+      if (!step2Valid) return; 
+    }
+
+    if (this.currentStep() < 3) {
+      this.currentStep.update(step => step + 1);
+    }
+  }
+
+  prevStep() {
+    if (this.currentStep() > 1) {
+      this.currentStep.update(step => step - 1);
+    }
+  }
+
+  onSubmit() {
+    if (this.form.invalid) return;
+
+    this.isLoading.set(true);
+    this.errorMessage.set(null); 
+
+    const rawValues = this.form.value;
+
+    
+    this.geoService.getCoordinatesFromFullAddress(
+      rawValues.address!,
+      rawValues.postalCode!,
+      rawValues.city!
+    ).subscribe({
+      next: (coords) => {
+        
+        
+        const payload: ShelterRegister & { latitude: number | null, longitude: number | null } = {
+          name: rawValues.name!,
+          companyNumber: rawValues.companyNumber!,
+          creationYear: Number(rawValues.creationYear), 
+          phoneNumber: rawValues.phoneNumber!,
+          address: rawValues.address!,
+          city: rawValues.city!,
+          postalCode: rawValues.postalCode!,
+          email: rawValues.email!,
+          password: rawValues.password!,
+          latitude: coords ? coords.latitude : null,   
+          longitude: coords ? coords.longitude : null  
+        };
+
+        
+        this.sendRegisterRequest(payload);
+      },
+      error: (err) => {
+        console.error("Échec du géocodage du refuge, envoi sans coordonnées.", err);
+        
+        
+        const fallbackPayload = {
+          name: rawValues.name!,
+          companyNumber: rawValues.companyNumber!,
+          creationYear: Number(rawValues.creationYear), 
+          phoneNumber: rawValues.phoneNumber!,
+          address: rawValues.address!,
+          city: rawValues.city!,
+          postalCode: rawValues.postalCode!,
+          email: rawValues.email!,
+          password: rawValues.password!,
+          latitude: null,
+          longitude: null
+        };
+        
+        this.sendRegisterRequest(fallbackPayload);
+      }
+    });
+  }
+
+  private sendRegisterRequest(payload: any): void {
+    this.authService.registerShelter(payload).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        console.log('Refuge enregistré avec succès ! 🎉');
+        this.router.navigate(['/login']); 
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        if (err.error?.message) {
+          this.errorMessage.set(err.error.message);
+        } else {
+          this.errorMessage.set("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+        }
+        console.error('Erreur inscription :', err);
+      }
+    });
+  }
 }
