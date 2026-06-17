@@ -10,11 +10,14 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class Navbar {
 private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
+private readonly router = inject(Router);
 
   
-  isLogged = computed(() => this.authService.connectedUser() !== null);
+isLogged = computed(() => this.authService.connectedUser() !== null);
+connectedUser = this.authService.connectedUser;
 
+isProfileComplete = this.authService.isProfileComplete;
+isPreferencesComplete = this.authService.isPreferencesComplete;
   
   isAdmin = computed(() => {
     const payload = this.authService.connectedUser();
@@ -26,6 +29,16 @@ private readonly authService = inject(AuthService);
     return payload?.accountType === 'Shelter'; 
   });
 
+handleFeedAccess(): void {
+    if (!this.isProfileComplete()) {
+      this.router.navigate(['/user-profile-form']);
+    } else if (!this.isPreferencesComplete()) {
+      this.router.navigate(['/preferences']);
+    } else {
+      this.router.navigate(['/feed']);
+    }
+  }
+  
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/welcome']);
