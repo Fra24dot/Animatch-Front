@@ -7,6 +7,11 @@ import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../../environments/environment';
 import { StorageService } from './storage';
 
+export interface OnboardingStatus {
+  hasProfile: boolean;
+  hasPreferences: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,19 +19,24 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly storage = inject(StorageService);
 
+  isProfileComplete = signal<boolean>(false);
+  isPreferencesComplete = signal<boolean>(false);
   connectedUser = signal<JwtPayload | null>(null);
 
-  
   constructor() {
     const savedPayload = this.storage.getLocal<JwtPayload>('payload');
     
     if (savedPayload) {
-      // Sécurité supplémentaire > On vérifie si le token n'est pas expiré 
       const currentTime = Math.floor(Date.now() / 1000);
       if (savedPayload.exp && savedPayload.exp < currentTime) {
-        this.logout(); // Expired ! On nettoie tout
+        this.logout(); 
       } else {
         this.connectedUser.set(savedPayload);
+        
+        
+        if (savedPayload.accountType === 'Adopter') { 
+          this.checkOnboardingStatus();
+        }
       }
     } else {
       this.connectedUser.set(null);
@@ -36,8 +46,38 @@ export class AuthService {
   login(credentials: UserLogin): Observable<TokenInfo> {
     return this.http.post<TokenInfo>(`${environment.apiUrl}/auth/login`, credentials)
       .pipe(
-        tap((tokenInfo: TokenInfo) => this.decodeToken(tokenInfo))
+        tap((tokenInfo: TokenInfo) => {
+          this.decodeToken(tokenInfo);
+          
+          const user = this.connectedUser();
+          if (user && user.accountType === 'Adopter') {
+            this.checkOnboardingStatus();
+          }
+        })
       );
+  }
+
+  checkOnboardingStatus(): void {
+    this.http.get<OnboardingStatus>(`${environment.apiUrl}/user/onboarding-status`)
+      .subscribe({
+        next: (status) => {
+          this.isProfileComplete.set(status.hasProfile);
+          this.isPreferencesComplete.set(status.hasPreferences);
+        },
+        error: () => {
+          this.isProfileComplete.set(false);
+          this.isPreferencesComplete.set(false);
+        }
+      });
+  }
+
+  
+  updateProfileStatus(completed: boolean): void {
+    this.isProfileComplete.set(completed);
+  }
+
+  updatePreferencesStatus(completed: boolean): void {
+    this.isPreferencesComplete.set(completed);
   }
 
   registerUser(data: UserRegister): Observable<void> {
@@ -66,6 +106,8 @@ export class AuthService {
 
   logout(): void {
     this.connectedUser.set(null);
+    this.isProfileComplete.set(false); 
+    this.isPreferencesComplete.set(false);
     this.storage.removeLocal('token');
     this.storage.removeLocal('payload');
   }

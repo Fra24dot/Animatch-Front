@@ -1,0 +1,35 @@
+<div class="adopter-container">
+  <h2>Mes coups de cœur </h2>
+
+  @if (isLoading()) {
+    <div class="loader">Chargement de vos demandes...</div>
+  } 
+  @else if (myLikes().length === 0) {
+    <div class="empty-state">
+      <p>Vous n'avez pas encore swipé de chiens ! Visitez vite le feed. 🐶</p>
+    </div>
+  } 
+  @else {
+    <div class="likes-list">
+      @for (item of myLikes(); track item.matchId) {
+        <div class="adopter-card">
+          <img [src]="item.dogImageUrl || 'assets/images/default-dog.png'" [alt]="item.dogName">
+          
+          <div class="details">
+            <h3>{{ item.dogName }}</h3>
+            
+            @if (item.status === 'Pending') {
+              <span class="status pending">⏳ En attente du refuge</span>
+            } 
+            @else if (item.status === 'Accepted') {
+              <span class="status accepted">🎉 Match validé ! Le chat est ouvert</span>
+            } 
+            @else {
+              <span class="status refused">❌ Non retenu</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

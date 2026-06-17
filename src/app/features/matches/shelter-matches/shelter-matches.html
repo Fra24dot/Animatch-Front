@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
+
+<div class="shelter-container">
+  <h2>Demandes d'adoption en attente 🐾</h2>
+
+  @if (isLoading()) {
+    <div class="loader">Chargement des demandes...</div>
+  } 
+  @else if (incomingLikes().length === 0) {
+    <div class="empty-state">
+      <p>Aucune demande en attente pour le moment. Vos pensionnaires attendent leur coup de cœur !</p>
+    </div>
+  } 
+  @else {
+    <div class="match-grid">
+      @for (like of incomingLikes(); track like.matchId) {
+        <div class="like-card">
+          <img [src]="like.dogImageUrl || 'assets/images/default-dog.png'" [alt]="like.dogName" class="dog-thumb">
+          
+          <div class="info">
+            <h3><strong>{{ like.adopterFirstName }} {{ like.adopterLastName }}</strong></h3>
+            <p>A craqué pour <strong>{{ like.dogName }}</strong> 😍</p>
+            <span class="date">Reçu le {{ like.likedAt | date:'shortDate' }}</span>
+          </div>
+          
+          <div class="actions">
+            <button (click)="processMatch(like.matchId, false)" class="btn-decline">Refuser</button>
+            <button (click)="processMatch(like.matchId, true)" class="btn-approve">Valider le Match ! 🎉</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+</app-paw-background>
