@@ -1,6 +1,8 @@
 export interface UserProfileRequest {
   familyCondition: {
     city: string;
+    latitude: number | null;  
+    longitude: number | null; 
     housingType: number;
     peopleCount: number;
     hasChildren: boolean;
