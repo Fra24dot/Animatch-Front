@@ -2,10 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatchService } from '../../../core/services/match.service';
 import { AdopterMatch } from '../../../shared/components/models/match.model';
 import { Router } from '@angular/router';
+import { PawBackground } from '../../../shared/components/paw-background/paw-background';
+import { Navbar } from '../../../shared/components/navbar/navbar';
 
 @Component({
   selector: 'app-adopter-like',
-  imports: [],
+  imports: [Navbar, PawBackground],
   templateUrl: './adopter-like.html',
   styleUrl: './adopter-like.scss',
 })

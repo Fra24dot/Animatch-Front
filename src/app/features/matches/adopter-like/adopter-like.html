@@ -1,3 +1,6 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
 <div class="adopter-container">
   <h2>Mes coups de cœur </h2>
 
@@ -19,13 +22,13 @@
             <h3>{{ item.dogName }}</h3>
             
             @if (item.status === 'Pending') {
-              <span class="status pending">⏳ En attente du refuge</span>
+              <span class="status pending"> En attente du refuge</span>
             } 
             @else if (item.status === 'Accepted') {
-              <span class="status accepted">🎉 Match validé ! Le chat est ouvert</span>
+              <span class="status accepted"> Match validé ! Le chat est ouvert</span>
             } 
             @else {
-              <span class="status refused">❌ Non retenu</span>
+              <span class="status refused"> Non retenu</span>
             }
           </div>
         </div>
@@ -33,3 +36,4 @@
     </div>
   }
 </div>
+</app-paw-background>

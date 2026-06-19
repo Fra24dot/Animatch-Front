@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
+<div class="conversations-container">
+  <h2>Mes Messages </h2>
+
+  <div class="conversations-list">
+    @for (conv of chatService.conversations(); track conv.matchId) {
+      <div class="conversation-item" (click)="goToChat(conv.matchId)">
+        
+        <div class="avatar-zone">
+          @if (conv.dogPictureUrl) {
+            <img [src]="conv.dogPictureUrl" alt="Photo de {{ conv.dogName }}" class="avatar" />
+          } @else {
+            <div class="avatar-placeholder">🐶</div>
+          }
+        </div>
+
+        <div class="conversation-info">
+          <div class="info-header">
+            <span class="interlocutor-name">{{ conv.interlocutorName }}</span>
+            @if (conv.lastMessageCreatedAt) {
+              <span class="message-date">{{ conv.lastMessageCreatedAt | date:'dd/MM HH:mm' }}</span>
+            }
+          </div>
+          
+          <div class="info-body">
+            <span class="dog-tag">Match avec <b>{{ conv.dogName }}</b></span>
+            <p class="last-message" [class.unread]="!conv.isLastMessageRead">
+              {{ conv.lastMessageContent || 'Aucun message pour le moment...' }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>Vous n'avez pas encore de conversations actives. Explorez les profils pour trouver un match ! ❤️</p>
+      </div>
+    }
+  </div>
+</div>
+</app-paw-background>

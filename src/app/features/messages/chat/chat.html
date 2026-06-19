@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
+  <div class="chat-box">
+    
+    <div class="chat-header">
+      <h3>Discussion 🐾</h3>
+      <span class="status" [class.connected]="chatService.isConnected()">
+        {{ chatService.isConnected() ? 'En ligne' : 'Connexion...' }}
+      </span>
+    </div>
+
+    <div class="chat-messages">
+      @for (msg of chatService.activeMessages(); track msg.id) {
+        <div class="message-wrapper" 
+             [class.me]="(isAdopterRole() && msg.isFromUser) || (!isAdopterRole() && !msg.isFromUser)"
+             [class.other]="(isAdopterRole() && !msg.isFromUser) || (!isAdopterRole() && msg.isFromUser)">
+          
+          <div class="message-bubble">
+            <p class="content">{{ msg.content }}</p>
+            <span class="time">{{ msg.createdAt | date:'HH:mm' }}</span>
+          </div>
+        </div>
+      } @empty {
+        <div class="no-messages">
+          <p>Aucun message pour le moment. Lancez la discussion ! 👋</p>
+        </div>
+      }
+    </div>
+
+    <form class="chat-input-area" (ngSubmit)="onSendMessage()">
+      <input 
+        type="text" 
+        name="message"
+        [(ngModel)]="newMessageText" 
+        placeholder="Écrivez votre message ici..." 
+        [disabled]="!chatService.isConnected()"
+        autocomplete="off"
+      />
+      <button type="submit" [disabled]="!newMessageText.trim() || !chatService.isConnected()">
+        Envoyer
+      </button>
+    </form>
+
+  </div>
+</app-paw-background>
