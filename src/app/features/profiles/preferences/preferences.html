@@ -1,6 +1,5 @@
 <app-navbar></app-navbar>
 
-
 <app-paw-background>
 <div class="profile-box">
   <h1>🐾 Mes Préférences</h1>
@@ -13,7 +12,9 @@
   }
 
   <form [formGroup]="prefForm" (ngSubmit)="onSubmit()">
-    <div class="form-slider" [ngClass]="{ 'step-two': currentStep() === 2, 'step-three': currentStep() === 3 }">
+    <div class="form-slider" 
+         [class.step-two]="currentStep() === 2" 
+         [class.step-three]="currentStep() === 3">
       
       <div class="form-step step-1">
         <h3>1. Distance & Taille</h3>

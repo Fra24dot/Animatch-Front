@@ -12,6 +12,8 @@ import { Feed } from './features/feed/feed';
 import { AdopterLike } from './features/matches/adopter-like/adopter-like';
 import { ShelterMatches } from './features/matches/shelter-matches/shelter-matches';
 import { feedGuard } from './core/guards/feed-guard';
+import { Conversation } from './features/messages/conversation/conversation';
+import { Chat } from './features/messages/chat/chat';
 
 export const routes: Routes = [
     { path: '', component: Welcome },
@@ -26,6 +28,8 @@ export const routes: Routes = [
     { path: 'feed', component: Feed, canActivate: [feedGuard] },
     { path: 'adopter-like', component: AdopterLike },
     {path: 'shelter-matches', component : ShelterMatches},
+    { path: 'messages', component: Conversation },
+    { path: 'chat/:matchId', component: Chat },
 
     
     { path: '**', redirectTo: '' }

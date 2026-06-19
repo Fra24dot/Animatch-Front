@@ -21,13 +21,13 @@
           
           <div class="info">
             <h3><strong>{{ like.adopterFirstName }} {{ like.adopterLastName }}</strong></h3>
-            <p>A craqué pour <strong>{{ like.dogName }}</strong> 😍</p>
+            <p>A craqué pour <strong>{{ like.dogName }}</strong></p>
             <span class="date">Reçu le {{ like.likedAt | date:'shortDate' }}</span>
           </div>
           
           <div class="actions">
             <button (click)="processMatch(like.matchId, false)" class="btn-decline">Refuser</button>
-            <button (click)="processMatch(like.matchId, true)" class="btn-approve">Valider le Match ! 🎉</button>
+            <button (click)="processMatch(like.matchId, true)" class="btn-approve">Valider le Match </button>
           </div>
         </div>
       }

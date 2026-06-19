@@ -1,0 +1,115 @@
+.conversations-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 0 15px;
+
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+
+  .conversations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .conversation-item {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      background-color: #fcfcfc;
+    }
+
+    .avatar-zone {
+      margin-right: 15px;
+
+      .avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .avatar-placeholder {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background-color: #ffeaa7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+    }
+
+    .conversation-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .info-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .interlocutor-name {
+          font-weight: 600;
+          color: #2c3e50;
+          font-size: 1.05rem;
+        }
+
+        .message-date {
+          font-size: 0.8rem;
+          color: #95a5a6;
+        }
+      }
+
+      .info-body {
+        .dog-tag {
+          display: inline-block;
+          font-size: 0.75rem;
+          background-color: #f1f2f6;
+          color: #57606f;
+          padding: 2px 8px;
+          border-radius: 10px;
+          margin-bottom: 4px;
+        }
+
+        .last-message {
+          margin: 0;
+          font-size: 0.9rem;
+          color: #7f8c8d;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 380px;
+
+          &.unread {
+            font-weight: bold;
+            color: #2c3e50;
+          }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #7f8c8d;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px dashed #ccd1d1;
+  }
+}
