@@ -15,16 +15,18 @@
 
   @if (errorMessage()) {
     <div class="status-message error">
-      <p>❌ {{ errorMessage() }}</p>
+      <p>{{ errorMessage() }}</p>
     </div>
   }
 
   @if (createdDog()) {
     <div class="status-message success">
-      <h3>🎉 {{ createdDog()?.name }} a été ajouté avec succès !</h3>
+      <h3>{{ createdDog()?.name }} a été ajouté avec succès !</h3>
       @if (createdDog()?.imageBase64) {
         <img [src]="createdDog()?.imageBase64" alt="Photo du chien" class="success-img" />
       }
+
+      
     </div>
   }
 

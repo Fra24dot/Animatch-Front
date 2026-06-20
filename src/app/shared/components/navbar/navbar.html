@@ -1,6 +1,6 @@
 <nav class="navbar">
-  @if (!isLogged()) {
-    <span class="navbar-left" routerLink="/about">Qui sommes nous?</span>
+  @if (!isLogged()&& !isSurPageHistoire()){
+    <span class="navbar-left" routerLink="/histoire">Qui sommes nous?</span>
   }
 
   @if (isLogged()) {
@@ -19,7 +19,8 @@
       @else if (isShelter()) {
         <a routerLink="/shelter-matches" routerLinkActive="active" class="nav-btn">Matchs</a>
         <a routerLink="/conversations" routerLinkActive="active" class="nav-btn">Messages</a>
-        
+        <a routerLink="/add-dog" routerLinkActive="active" class="nav-btn">Ajouter un chien</a>
+
         
       }
 

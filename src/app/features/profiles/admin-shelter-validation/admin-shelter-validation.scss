@@ -1,8 +1,33 @@
 .admin-container {
-  max-width: 1100px;
+  max-width: 1200px; 
   margin: 0 auto;
-  padding: 3rem 1.5rem;
-  font-family: 'Rethink Sans', sans-serif;
+  padding: 2rem;
+  max-height: calc(100vh - 100px); 
+  overflow-y: auto; 
+  padding-bottom: 80px;
+  &::-webkit-scrollbar {
+  width: 8px; /* Largeur de la barre verticale (assez fine) */
+  height: 8px; /* Hauteur de la barre horizontale si besoin */
+}
+
+/* Le fond de la piste de scroll (ton rose poudré) */
+&::-webkit-scrollbar-track {
+  background: #fcebec; 
+  border-radius: 10px;
+}
+
+
+&::-webkit-scrollbar-thumb {
+  background: #b91c1c; 
+  border-radius: 10px;
+  border: 1px solid #fcebec; 
+}
+
+
+&::-webkit-scrollbar-thumb:hover {
+  background: #991b1b; 
+}
+
 
   .admin-header {
     margin-bottom: 3rem;

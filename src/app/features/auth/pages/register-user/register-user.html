@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <app-paw-background></app-paw-background>
 <div class="register-box">
-  <h1>Register</h1>
+  <h1>S'inscrire</h1>
 
   @if (errorMessage()) {
     <p class="error-message">{{ errorMessage() }}</p>
@@ -61,7 +61,7 @@
             &larr; Retour
           </button>
           <button type="submit" class="btn-register" [disabled]="form.invalid || isLoading()">
-            Register
+            Créer le compte
           </button>
         </div>
       </div>

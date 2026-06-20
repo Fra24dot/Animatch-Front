@@ -10,11 +10,17 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class Navbar {
 private readonly authService = inject(AuthService);
-private readonly router = inject(Router);
+private router = inject(Router);
 
   
 isLogged = computed(() => this.authService.connectedUser() !== null);
 connectedUser = this.authService.connectedUser;
+
+isSurPageHistoire(): boolean {
+    return this.router.url === '/histoire';
+  }
+
+ 
 
 isProfileComplete = this.authService.isProfileComplete;
 isPreferencesComplete = this.authService.isPreferencesComplete;
