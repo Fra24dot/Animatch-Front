@@ -14,22 +14,31 @@ import { ShelterMatches } from './features/matches/shelter-matches/shelter-match
 import { feedGuard } from './core/guards/feed-guard';
 import { Conversation } from './features/messages/conversation/conversation';
 import { Chat } from './features/messages/chat/chat';
+import { Histoire } from './shared/components/histoire/histoire';
+import { authGuard } from './core/guards/auth-guard';
+import { UserDashboard } from './features/profiles/user-dashboard/user-dashboard';
 
 export const routes: Routes = [
     { path: '', component: Welcome },
+    { path: 'welcome', component: Welcome },
+
     { path: 'login', component: Login },
     { path: 'register', component: Register },
     { path: 'register-user', component: RegisterUser },
     { path: 'register-shelter', component: RegisterShelter },
-    { path: 'user-profile-form', component: UserProfileForm },
-    { path: 'admin-shelter-validation', component: AdminShelterValidation },
-    { path: 'add-dog', component: AddDog },
-    { path: 'preferences', component: Preferences },
-    { path: 'feed', component: Feed, canActivate: [feedGuard] },
-    { path: 'adopter-like', component: AdopterLike },
-    {path: 'shelter-matches', component : ShelterMatches},
-    { path: 'messages', component: Conversation },
-    { path: 'chat/:matchId', component: Chat },
+    { path: 'histoire', component: Histoire },
+    { path: 'user-profile-form', component: UserProfileForm, canActivate: [authGuard] },
+    { path: 'user-dashboard', component: UserDashboard, canActivate: [authGuard] },
+    { path: 'preferences', component: Preferences, canActivate: [authGuard] },
+    { path: 'admin-shelter-validation', component: AdminShelterValidation, canActivate: [authGuard] },
+    { path: 'add-dog', component: AddDog, canActivate: [authGuard] },
+    { path: 'adopter-like', component: AdopterLike, canActivate: [authGuard] },
+    { path: 'shelter-matches', component: ShelterMatches, canActivate: [authGuard] },
+    { path: 'messages', component: Conversation, canActivate: [authGuard] },
+    { path: 'chat/:matchId', component: Chat, canActivate: [authGuard] },
+    
+    
+    { path: 'feed', component: Feed },
 
     
     { path: '**', redirectTo: '' }

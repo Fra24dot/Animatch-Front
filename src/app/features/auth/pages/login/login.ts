@@ -37,7 +37,7 @@ export class Login {
         next: () => {
           this.isLoading.set(false);
 
-          // Récupère le rôle de l'utilisateur 
+          
           const accountType = this.authService.connectedUser()?.accountType;
 
           if (accountType === 'Admin') {
@@ -45,7 +45,7 @@ export class Login {
           } else if (accountType === 'Shelter') {
             this.router.navigate(['/add-dog']);
           } else {
-            this.router.navigate(['/user-profile-form']);
+            this.router.navigate(['/user-dashboard']);
           }
         },
         error: (err) => {

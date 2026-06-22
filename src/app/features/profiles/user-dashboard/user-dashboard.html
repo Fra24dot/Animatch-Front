@@ -1,0 +1,83 @@
+<app-navbar></app-navbar>
+
+<app-paw-background>
+  <div class="dashboard-container">
+    
+    <div class="dashboard-card animate-fade-in">
+      
+      <div class="dashboard-header">
+        <h1>Mon Profil Adoptant 🐶</h1>
+        <p class="subtitle">Voici les critères utilisés par l'algorithme pour rechercher votre futur compagnon.</p>
+      </div>
+
+      <div class="dashboard-sections-grid">
+        
+        <div class="info-section">
+          <div class="section-title-container">
+            <i class="fa-solid fa-house-chimney icon-title"></i>
+            <h3>Style de vie & Foyer</h3>
+          </div>
+          
+          <ul class="info-list">
+            <li>
+              <span class="label">Type de logement :</span> 
+              <span class="value badge-value">
+                @if (profileData()?.familyCondition?.housingType === 1) { Maison }
+                @else if (profileData()?.familyCondition?.housingType === 2) { Appartement }
+                @else { Studio / Autre }
+              </span>
+            </li>
+            <li>
+              <span class="label">Présence d'enfants :</span> 
+              <span class="value">
+                {{ profileData()?.familyCondition?.hasChildren ? 'Oui ' : 'Non ' }}
+              </span>
+            </li>
+            <li>
+              <span class="label">Présence d'autres animaux :</span> 
+              <span class="value">
+                {{ profileData()?.experience?.hasAnimals ? 'Oui ' : 'Non ' }}
+              </span>
+            </li>
+          </ul>
+          
+          <button (click)="modifierFormulaire()" class="btn-edit-dashboard">
+            <i class="fa-solid fa-pen"></i> Modifier mes infos
+          </button>
+        </div>
+
+        <div class="divider-vertical"></div>
+
+        <div class="info-section">
+          <div class="section-title-container">
+            <i class="fa-solid fa-sliders icon-title"></i>
+            <h3>Mes Préférences de Recherche</h3>
+          </div>
+          
+          <ul class="info-list">
+            <li>
+              <span class="label">Distance maximale :</span> 
+              <span class="value highlight-text">
+                {{ preferencesData()?.maxDistance ? preferencesData()?.maxDistance + ' km' : 'Non configurée' }}
+              </span>
+            </li>
+            <li>
+              <span class="label">Tailles de chien acceptées :</span> 
+              <span class="value">
+                {{ preferencesData()?.sizesFilter || 'Toutes les tailles' }}
+              </span>
+            </li>
+            <li>
+              <span class="label">Niveaux d'énergie recherchés :</span> 
+              <span class="value">
+                {{ preferencesData()?.energyLevelsFilter || 'Tous niveaux' }}
+              </span>
+            </li>
+          </ul>
+          
+          <button (click)="modifierPreferences()" class="btn-edit-dashboard">
+            <i class="fa-solid fa-gear"></i> Modifier mes filtres
+          </button>
+        </div>
+
+      </div> </div> </div> </app-paw-background>

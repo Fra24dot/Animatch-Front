@@ -11,7 +11,9 @@ import { AdopterMatch, ShelterIncomingLike } from "../../shared/components/model
 export class MatchService {
     
     private readonly http = inject(HttpClient);
-    private readonly apiUrl = `${environment.apiUrl}/matches`;
+    private readonly apiUrl = `${environment.apiUrl}/match`;
+
+    
 
     getMyLikes(): Observable<AdopterMatch[]> {
         return this.http.get<AdopterMatch[]>(`${this.apiUrl}/my-likes`);

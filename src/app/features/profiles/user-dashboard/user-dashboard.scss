@@ -1,0 +1,193 @@
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  padding: 40px 20px;
+}
+
+// 📦 LE CADRE BLANC STYLE "SWIPE CARD"
+.dashboard-card {
+  width: 100%;
+  max-width: 850px; // Plus large qu'une carte de swipe car il y a deux colonnes
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  border-radius: 28px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.dashboard-header {
+  text-align: center;
+  border-bottom: 1px solid #f0f2f5;
+  padding-bottom: 20px;
+
+  h1 {
+    font-size: 2.2rem;
+    color: #2b3a4a;
+    margin: 0 0 10px 0;
+  }
+
+  .subtitle {
+    color: #6c7a89;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Disposition en deux colonnes pour Foyer VS Préférences
+.dashboard-sections-grid {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+.info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .section-title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .icon-title {
+      font-size: 1.4rem;
+      color: #ff4b4b; // Rappel couleur thème principal
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: #333;
+      margin: 0;
+    }
+  }
+}
+
+.divider-vertical {
+  width: 1px;
+  background-color: #e6e9ed;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 1px;
+  }
+}
+
+// Style des listes d'informations
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #f0f2f5;
+
+    .label {
+      color: #5a6578;
+      font-weight: 500;
+    }
+
+    .value {
+      color: #1e2530;
+      font-weight: 600;
+      text-align: right;
+
+      &.badge-value {
+        background: #f0f2f5;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #4f5d75;
+      }
+
+      &.highlight-text {
+        color: #20c997; // Vert comme tes boutons Like
+      }
+    }
+  }
+}
+
+// 🚀 DESIGN DES BOUTONS DE MODIFICATION
+.btn-edit-dashboard {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid #ffe3e3;
+  background-color: #fff;
+  color: #ff4b4b;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(255, 75, 75, 0.05);
+
+  &:hover {
+    background-color: #ff4b4b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 75, 75, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Loader & Fallback
+.loader-container, .fallback-card {
+  text-align: center;
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff4b4b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

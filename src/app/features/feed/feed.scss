@@ -28,6 +28,16 @@
   display: flex;
   flex-direction: column;
 
+  cursor: grab;
+  user-select: none;         
+  -webkit-user-select: none;
+  touch-action: none;        
+  will-change: transform;   
+
+  &:active {
+    cursor: grabbing;
+  }
+
   .card-image-container {
     position: relative;
     height: 350px;
@@ -36,6 +46,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      pointer-events: none; 
     }
 
     .card-quick-info {
@@ -88,6 +99,7 @@
     padding: 20px;
     background: #fafafa;
     border-top: 1px solid #f0f0f0;
+    cursor: default; 
 
     .btn-action {
       width: 65px; height: 65px;
@@ -100,8 +112,30 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 
       &:hover { transform: scale(1.1); }
+      &:active { transform: scale(0.95); } 
+      
       &.dislike { background: white; color: #ff4b4b; border: 1px solid #ffe3e3; }
       &.like { background: #20c997; color: white; }
     }
   }
+}
+
+
+.loader-container {
+  text-align: center;
+  color: #4f5d75;
+  
+  .spinner {
+    width: 50px; height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #20c997;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

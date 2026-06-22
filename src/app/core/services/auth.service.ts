@@ -16,33 +16,30 @@ export interface OnboardingStatus {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly http = inject(HttpClient);
+ private readonly http = inject(HttpClient);
   private readonly storage = inject(StorageService);
 
   isProfileComplete = signal<boolean>(false);
   isPreferencesComplete = signal<boolean>(false);
-  connectedUser = signal<JwtPayload | null>(null);
+  public connectedUser = signal<any | null>(null);
 
   constructor() {
-    const savedPayload = this.storage.getLocal<JwtPayload>('payload');
-    
-    if (savedPayload) {
-      const currentTime = Math.floor(Date.now() / 1000);
-      if (savedPayload.exp && savedPayload.exp < currentTime) {
-        this.logout(); 
-      } else {
-        this.connectedUser.set(savedPayload);
-        
-        
-        if (savedPayload.accountType === 'Adopter') { 
-          this.checkOnboardingStatus();
-        }
-      }
+  const savedPayload = this.storage.getLocal<any>('payload');
+  
+  if (savedPayload) {
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (savedPayload.exp && savedPayload.exp < currentTime) {
+      this.logout(); 
     } else {
-      this.connectedUser.set(null);
+      this.connectedUser.set(savedPayload);
+      
+      if (savedPayload.accountType === 'Adopter') { 
+        
+        this.checkOnboardingStatus().subscribe();
+      }
     }
   }
-
+}
   login(credentials: UserLogin): Observable<TokenInfo> {
     return this.http.post<TokenInfo>(`${environment.apiUrl}/auth/login`, credentials)
       .pipe(
@@ -57,21 +54,43 @@ export class AuthService {
       );
   }
 
-  checkOnboardingStatus(): void {
-    this.http.get<OnboardingStatus>(`${environment.apiUrl}/user/onboarding-status`)
-      .subscribe({
-        next: (status) => {
-          this.isProfileComplete.set(status.hasProfile);
-          this.isPreferencesComplete.set(status.hasPreferences);
-        },
-        error: () => {
-          this.isProfileComplete.set(false);
-          this.isPreferencesComplete.set(false);
-        }
-      });
+  checkOnboardingStatus():Observable<OnboardingStatus> {
+    return this.http.get<OnboardingStatus>(`${environment.apiUrl}/user/onboarding-status`).pipe(
+    tap(status => {
+      this.isProfileComplete.set(status.hasProfile);
+      this.isPreferencesComplete.set(status.hasPreferences);
+    })
+  );
+}
+
+  private decodeToken(token: TokenInfo): void {
+    const claims = jwtDecode<any>(token.token);
+
+    const payload = {
+      sub: claims.sub,
+      email: claims.email,
+      accountType: claims.accountType,
+      exp: claims.exp,
+      token: token.token, 
+    };
+
+    this.connectedUser.set(payload);
+    this.storage.setLocal<string>('token', token.token);
+    this.storage.setLocal<any>('payload', payload);
   }
 
-  
+  logout(): void {
+    this.connectedUser.set(null);
+    this.isProfileComplete.set(false); 
+    this.isPreferencesComplete.set(false);
+    this.storage.removeLocal('token');
+    this.storage.removeLocal('payload');
+  }
+
+  isLoggedIn(): boolean {
+    return this.connectedUser() !== null;
+  }
+
   updateProfileStatus(completed: boolean): void {
     this.isProfileComplete.set(completed);
   }
@@ -86,33 +105,5 @@ export class AuthService {
 
   registerShelter(data: ShelterRegister): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}/auth/register/shelter`, data);
-  }
-
-  private decodeToken(token: TokenInfo): void {
-    const claims = jwtDecode<JwtPayload>(token.token);
-
-    const payload: JwtPayload = {
-      sub: claims.sub,
-      email: claims.email,
-      accountType: claims.accountType,
-      exp: claims.exp,
-      token: token.token,
-    };
-
-    this.connectedUser.set(payload);
-    this.storage.setLocal<string>('token', token.token);
-    this.storage.setLocal<JwtPayload>('payload', payload);
-  }
-
-  logout(): void {
-    this.connectedUser.set(null);
-    this.isProfileComplete.set(false); 
-    this.isPreferencesComplete.set(false);
-    this.storage.removeLocal('token');
-    this.storage.removeLocal('payload');
-  }
-
-  isLoggedIn(): boolean {
-    return this.connectedUser() !== null;
   }
 }

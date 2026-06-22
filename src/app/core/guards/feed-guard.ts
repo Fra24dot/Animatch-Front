@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { catchError, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export const feedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -12,18 +14,25 @@ export const feedGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  
-  if (!authService.isProfileComplete()) {
-    router.navigate(['/user-profile-form']);
-    return false;
-  }
-
  
-  if (!authService.isPreferencesComplete()) {
-    router.navigate(['/preferences']);
-    return false;
-  }
+  return authService.checkOnboardingStatus().pipe(
+    map((status) => {
+      if (!status.hasProfile) {
+        router.navigate(['/user-profile-form']);
+        return false;
+      }
 
-  
-  return true;
+      if (!status.hasPreferences) {
+        router.navigate(['/preferences']);
+        return false;
+      }
+
+      return true; 
+    }),
+    
+    catchError(() => {
+      router.navigate(['/welcome']);
+      return of(false);
+    })
+  );
 };
